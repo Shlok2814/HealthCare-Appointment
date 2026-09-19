@@ -6,9 +6,9 @@ import { SlotPicker } from '../components/booking/SlotPicker';
 import { SymptomTriageModal } from '../components/booking/SymptomTriageModal';
 import { EmergencyUrgentModal } from '../components/common/EmergencyUrgentModal';
 import { useAuth } from '../context/AuthContext';
-import { 
-  HeartPulse, Search, Shield, Zap, Sparkles, CheckCircle2, 
-  Calendar, Stethoscope, ArrowRight, Activity, SlidersHorizontal, 
+import {
+  HeartPulse, Search, Shield, Zap, Sparkles, CheckCircle2,
+  Calendar, Stethoscope, ArrowRight, Activity, SlidersHorizontal,
   Tag, Video, Clock, Star, PhoneCall
 } from 'lucide-react';
 
@@ -149,15 +149,15 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
             <a href="#booking-directory" className="pulse-btn pulse-btn-primary" style={{ padding: '14px 28px', fontSize: '1rem', fontWeight: 700 }}>
               <Calendar size={18} /> Find & Book Doctor
             </a>
-            <button 
+            <button
               onClick={() => setIsEmergencyModalOpen(true)}
               className="pulse-btn"
-              style={{ 
-                background: '#FEE2E2', 
-                color: '#DC2626', 
-                border: '1px solid #FCA5A5', 
-                padding: '14px 22px', 
-                fontSize: '1rem', 
+              style={{
+                background: '#FEE2E2',
+                color: '#DC2626',
+                border: '1px solid #FCA5A5',
+                padding: '14px 22px',
+                fontSize: '1rem',
                 fontWeight: 700,
                 display: 'flex',
                 alignItems: 'center',
@@ -370,7 +370,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
               <div style={{ padding: '48px', textAlign: 'center', background: 'var(--bg-subtle)', borderRadius: '14px', color: 'var(--text-muted)' }}>
                 <p style={{ fontWeight: 700, fontSize: '1rem', marginBottom: '6px' }}>No physicians found.</p>
                 <p style={{ fontSize: '0.85rem' }}>Try clearing your search query or selecting "All Specialties".</p>
-                <button 
+                <button
                   onClick={() => { setSelectedSpecialty('All Specialties'); setSearchTerm(''); }}
                   className="pulse-btn pulse-btn-secondary"
                   style={{ marginTop: '14px', fontSize: '0.85rem' }}

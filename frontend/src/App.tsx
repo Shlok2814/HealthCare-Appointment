@@ -8,6 +8,7 @@ import { PatientPortal } from './pages/PatientPortal';
 import { DoctorPortal } from './pages/DoctorPortal';
 import { AdminPortal } from './pages/AdminPortal';
 import { EmergencyUrgentModal } from './components/common/EmergencyUrgentModal';
+import { HealthChatbotWidget } from './components/chat/HealthChatbotWidget';
 import { UserRole } from '@pulsepoint/shared';
 
 const AppContent: React.FC = () => {
@@ -94,6 +95,9 @@ const AppContent: React.FC = () => {
           }}
         />
       )}
+
+      {/* 24/7 AI Health & Clinical Triage Chatbot Widget */}
+      <HealthChatbotWidget />
 
       <Footer />
     </div>

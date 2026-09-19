@@ -1,7 +1,7 @@
 import React from 'react';
 import { DoctorDTO } from '@pulsepoint/shared';
-import { 
-  X, Star, Award, GraduationCap, Building2, Globe, 
+import {
+  X, Star, Award, GraduationCap, Building2, Globe,
   BookOpen, CheckCircle2, ShieldCheck, Heart, Calendar, MessageSquare, ThumbsUp
 } from 'lucide-react';
 
@@ -77,12 +77,12 @@ export const DoctorProfileModal: React.FC<DoctorProfileModalProps> = ({
 
   return (
     <div className="pulse-modal-overlay">
-      <div 
-        className="pulse-modal" 
-        style={{ 
-          maxWidth: '900px', 
-          width: '95vw', 
-          maxHeight: '90vh', 
+      <div
+        className="pulse-modal"
+        style={{
+          maxWidth: '900px',
+          width: '95vw',
+          maxHeight: '90vh',
           overflowY: 'auto',
           padding: 0,
           borderRadius: '20px',
@@ -91,41 +91,41 @@ export const DoctorProfileModal: React.FC<DoctorProfileModalProps> = ({
         }}
       >
         {/* Header Hero Banner */}
-        <div style={{ 
-          background: 'linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #0369A1 100%)', 
-          padding: '32px 32px 28px', 
+        <div style={{
+          background: 'linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #0369A1 100%)',
+          padding: '32px 32px 28px',
           color: '#FFFFFF',
           position: 'relative'
         }}>
-          <button 
+          <button
             onClick={onClose}
-            style={{ 
-              position: 'absolute', 
-              top: '20px', 
-              right: '20px', 
-              background: 'rgba(255, 255, 255, 0.15)', 
-              border: 'none', 
+            style={{
+              position: 'absolute',
+              top: '20px',
+              right: '20px',
+              background: 'rgba(255, 255, 255, 0.15)',
+              border: 'none',
               borderRadius: '50%',
               width: '36px',
               height: '36px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              cursor: 'pointer', 
-              color: '#FFF' 
+              cursor: 'pointer',
+              color: '#FFF'
             }}
           >
             <X size={20} />
           </button>
 
           <div style={{ display: 'flex', gap: '24px', alignItems: 'center', flexWrap: 'wrap' }}>
-            <div style={{ 
-              width: '90px', 
-              height: '90px', 
-              borderRadius: '20px', 
-              background: 'linear-gradient(135deg, #0284C7, #0D9488)', 
-              display: 'flex', 
-              alignItems: 'center', 
+            <div style={{
+              width: '90px',
+              height: '90px',
+              borderRadius: '20px',
+              background: 'linear-gradient(135deg, #0284C7, #0D9488)',
+              display: 'flex',
+              alignItems: 'center',
               justifyContent: 'center',
               fontSize: '2.5rem',
               fontWeight: 900,
@@ -138,22 +138,22 @@ export const DoctorProfileModal: React.FC<DoctorProfileModalProps> = ({
 
             <div style={{ flex: 1, minWidth: '240px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px', flexWrap: 'wrap' }}>
-                <span style={{ 
-                  background: 'rgba(14, 165, 233, 0.25)', 
-                  color: '#38BDF8', 
+                <span style={{
+                  background: 'rgba(14, 165, 233, 0.25)',
+                  color: '#38BDF8',
                   border: '1px solid rgba(56, 189, 248, 0.4)',
-                  padding: '3px 10px', 
-                  borderRadius: '8px', 
+                  padding: '3px 10px',
+                  borderRadius: '8px',
                   fontSize: '0.8rem',
                   fontWeight: 700
                 }}>
                   {doctor.specialization}
                 </span>
-                <span style={{ 
-                  background: 'rgba(16, 185, 129, 0.25)', 
-                  color: '#34D399', 
-                  padding: '3px 10px', 
-                  borderRadius: '8px', 
+                <span style={{
+                  background: 'rgba(16, 185, 129, 0.25)',
+                  color: '#34D399',
+                  padding: '3px 10px',
+                  borderRadius: '8px',
                   fontSize: '0.8rem',
                   fontWeight: 700,
                   display: 'flex',
@@ -383,12 +383,12 @@ export const DoctorProfileModal: React.FC<DoctorProfileModalProps> = ({
             <button onClick={onClose} className="pulse-btn pulse-btn-secondary" style={{ padding: '10px 18px' }}>
               Close
             </button>
-            <button 
+            <button
               onClick={() => {
                 onBook(doctor);
                 onClose();
               }}
-              className="pulse-btn pulse-btn-primary" 
+              className="pulse-btn pulse-btn-primary"
               style={{ padding: '10px 24px', fontWeight: 800 }}
             >
               Select & View Available Slots

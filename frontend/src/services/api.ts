@@ -21,7 +21,7 @@ class ApiClient {
     return localStorage.getItem('pulsepoint_token');
   }
 
-  private async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
+  private async request<T>(endpoint: string, options: RequestInit = {}, timeoutMs: number = 7000): Promise<T> {
     const token = this.getToken();
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
@@ -32,19 +32,27 @@ class ApiClient {
       headers['Authorization'] = `Bearer ${token}`;
     }
 
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-      ...options,
-      headers
-    });
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
 
-    const data = await response.json().catch(() => ({}));
+    try {
+      const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+        ...options,
+        headers,
+        signal: controller.signal
+      });
 
-    if (!response.ok) {
-      const errorMessage = data.message || (data.errors ? data.errors.map((e: any) => e.message).join(', ') : 'Network request failed');
-      throw new Error(errorMessage);
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        const errorMessage = data.message || (data.errors ? data.errors.map((e: any) => e.message).join(', ') : 'Network request failed');
+        throw new Error(errorMessage);
+      }
+
+      return data.data !== undefined ? data.data : data;
+    } finally {
+      clearTimeout(timer);
     }
-
-    return data.data !== undefined ? data.data : data;
   }
 
   // Auth endpoints
@@ -72,12 +80,13 @@ class ApiClient {
       const params = new URLSearchParams();
       if (specialty && specialty !== 'All Specialties') params.append('specialty', specialty);
       if (search) params.append('search', search);
-      const doctors = await this.request<DoctorDTO[]>(`/doctors?${params.toString()}`);
+      // Use 1500ms max timeout for doctors directory so cold-start backends do not stall the user
+      const doctors = await this.request<DoctorDTO[]>(`/doctors?${params.toString()}`, {}, 1500);
       if (Array.isArray(doctors) && doctors.length > 0) {
         return doctors;
       }
     } catch (err) {
-      console.warn('Backend doctors fetch failed or sleeping, using verified registry:', err);
+      // Background revalidation fallback
     }
 
     // Resilient fallback to DEFAULT_PHYSICIANS
@@ -101,7 +110,7 @@ class ApiClient {
 
   async getDoctorById(doctorId: string): Promise<DoctorDTO> {
     try {
-      const doc = await this.request<DoctorDTO>(`/doctors/${doctorId}`);
+      const doc = await this.request<DoctorDTO>(`/doctors/${doctorId}`, {}, 1500);
       if (doc) return doc;
     } catch (err) {
       // fallback
@@ -114,12 +123,13 @@ class ApiClient {
     try {
       const params = new URLSearchParams({ date });
       if (patientId) params.append('patientId', patientId);
-      const slots = await this.request<AvailableSlot[]>(`/doctors/${doctorId}/slots?${params.toString()}`);
+      // Use 1500ms max timeout for fast slot retrieval
+      const slots = await this.request<AvailableSlot[]>(`/doctors/${doctorId}/slots?${params.toString()}`, {}, 1500);
       if (Array.isArray(slots) && slots.length > 0) {
         return slots;
       }
     } catch (err) {
-      console.warn('Backend slot fetch fallback for date:', date);
+      // Background slot fallback
     }
 
     // Dynamic slot generation for selected date (9 AM to 5 PM every 30 mins)

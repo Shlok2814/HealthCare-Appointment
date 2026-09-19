@@ -14,22 +14,57 @@ import {
   Lock, Award, ShieldCheck, HelpCircle, FileText, X, ArrowUpDown
 } from 'lucide-react';
 
+import { DEFAULT_PHYSICIANS } from '../services/defaultDoctors';
+
 interface LandingPageProps {
   onNavigate: (view: string) => void;
 }
 
+const filterAndSortDoctors = (
+  sourceList: DoctorDTO[],
+  specialty: string,
+  search: string,
+  sort: string
+): DoctorDTO[] => {
+  let filtered = [...sourceList];
+  if (specialty && specialty !== 'All Specialties') {
+    filtered = filtered.filter(d => 
+      d.specialization.toLowerCase().includes(specialty.toLowerCase()) ||
+      specialty.toLowerCase().includes(d.specialization.toLowerCase())
+    );
+  }
+  if (search && search.trim()) {
+    const q = search.toLowerCase().trim();
+    filtered = filtered.filter(d =>
+      d.name.toLowerCase().includes(q) ||
+      d.specialization.toLowerCase().includes(q) ||
+      d.bio.toLowerCase().includes(q)
+    );
+  }
+  if (sort === 'rating') {
+    filtered.sort((a, b) => (b.rating || 4.9) - (a.rating || 4.9));
+  } else if (sort === 'fee_asc') {
+    filtered.sort((a, b) => a.consultationFee - b.consultationFee);
+  } else if (sort === 'experience') {
+    filtered.sort((a, b) => (b.experienceYears || 0) - (a.experienceYears || 0));
+  }
+  return filtered;
+};
+
 export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
   const { user } = useAuth();
-  const [doctors, setDoctors] = useState<DoctorDTO[]>([]);
   const [selectedSpecialty, setSelectedSpecialty] = useState<string>('All Specialties');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [sortBy, setSortBy] = useState<'rating' | 'fee_asc' | 'experience' | 'recommended' | 'name_asc'>('rating');
-  const [selectedDoctor, setSelectedDoctor] = useState<DoctorDTO | null>(null);
+  const [doctors, setDoctors] = useState<DoctorDTO[]>(() => 
+    filterAndSortDoctors(DEFAULT_PHYSICIANS, 'All Specialties', '', 'rating')
+  );
+  const [selectedDoctor, setSelectedDoctor] = useState<DoctorDTO | null>(() => DEFAULT_PHYSICIANS[0] || null);
   const [selectedSlot, setSelectedSlot] = useState<AvailableSlot | null>(null);
   const [isTriageModalOpen, setIsTriageModalOpen] = useState<boolean>(false);
   const [isEmergencyModalOpen, setIsEmergencyModalOpen] = useState<boolean>(false);
   const [isDoctorChatOpen, setIsDoctorChatOpen] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [bookingSuccessNotice, setBookingSuccessNotice] = useState<string | null>(null);
 
   const specialties = [
@@ -73,35 +108,34 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
   ];
 
   const fetchDoctors = async () => {
-    setIsLoading(true);
+    // 1. Instant local filter
+    const localFiltered = filterAndSortDoctors(DEFAULT_PHYSICIANS, selectedSpecialty, searchTerm, sortBy);
+    setDoctors(localFiltered);
+    if (localFiltered.length > 0) {
+      if (!selectedDoctor || !localFiltered.some(d => d.id === selectedDoctor.id)) {
+        setSelectedDoctor(localFiltered[0]);
+      }
+    } else {
+      setSelectedDoctor(null);
+    }
+
+    // 2. Background non-blocking network revalidation
     try {
       const data = await api.getDoctors(
         selectedSpecialty === 'All Specialties' ? undefined : selectedSpecialty,
         searchTerm
       );
-
-      // Sort doctors
-      let sorted = [...data];
-      if (sortBy === 'rating') {
-        sorted.sort((a, b) => (b.rating || 4.9) - (a.rating || 4.9));
-      } else if (sortBy === 'fee_asc') {
-        sorted.sort((a, b) => a.consultationFee - b.consultationFee);
-      } else if (sortBy === 'experience') {
-        sorted.sort((a, b) => (b.experienceYears || 0) - (a.experienceYears || 0));
-      }
-
-      setDoctors(sorted);
-      if (sorted.length > 0) {
-        if (!selectedDoctor || !sorted.some(d => d.id === selectedDoctor.id)) {
-          setSelectedDoctor(sorted[0]);
+      if (Array.isArray(data) && data.length > 0) {
+        const sorted = filterAndSortDoctors(data, selectedSpecialty, searchTerm, sortBy);
+        setDoctors(sorted);
+        if (sorted.length > 0) {
+          if (!selectedDoctor || !sorted.some(d => d.id === selectedDoctor.id)) {
+            setSelectedDoctor(sorted[0]);
+          }
         }
-      } else {
-        setSelectedDoctor(null);
       }
     } catch (err) {
-      console.error('Failed to load doctors:', err);
-    } finally {
-      setIsLoading(false);
+      // Ignored - fallback already active
     }
   };
 

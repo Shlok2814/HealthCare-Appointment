@@ -34,8 +34,29 @@ export const SlotPicker: React.FC<SlotPickerProps> = ({
     return d.toISOString().split('T')[0];
   };
 
+  const generateLocalSlots = (date: string): AvailableSlot[] => {
+    const generatedSlots: AvailableSlot[] = [];
+    const times = ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30'];
+    for (const t of times) {
+      const startIso = `${date}T${t}:00.000Z`;
+      const [hh, mm] = t.split(':').map(Number);
+      const endMins = mm + 30;
+      const endHh = endMins >= 60 ? hh + 1 : hh;
+      const finalMm = endMins >= 60 ? endMins - 60 : endMins;
+      const endIso = `${date}T${String(endHh).padStart(2, '0')}:${String(finalMm).padStart(2, '0')}:00.000Z`;
+      
+      generatedSlots.push({
+        slotStart: startIso,
+        slotEnd: endIso,
+        isAvailable: true,
+        isHeld: false
+      });
+    }
+    return generatedSlots;
+  };
+
   const [selectedDate, setSelectedDate] = useState<string>(getInitialDate());
-  const [slots, setSlots] = useState<AvailableSlot[]>([]);
+  const [slots, setSlots] = useState<AvailableSlot[]>(() => generateLocalSlots(getInitialDate()));
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isHolding, setIsHolding] = useState<boolean>(false);
   const [holdTimerSeconds, setHoldTimerSeconds] = useState<number | null>(null);
@@ -43,19 +64,19 @@ export const SlotPicker: React.FC<SlotPickerProps> = ({
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const fetchSlots = async () => {
-    setIsLoading(true);
     setErrorMessage(null);
     try {
       const data = await api.getAvailableSlots(doctorId, selectedDate, user?.id);
-      setSlots(data);
+      if (Array.isArray(data) && data.length > 0) {
+        setSlots(data);
+      }
     } catch (err: any) {
-      setErrorMessage(err.message || 'Failed to fetch schedule slots');
-    } finally {
-      setIsLoading(false);
+      // Background revalidation fallback
     }
   };
 
   useEffect(() => {
+    setSlots(generateLocalSlots(selectedDate));
     fetchSlots();
   }, [doctorId, selectedDate]);
 

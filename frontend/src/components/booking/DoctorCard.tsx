@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { DoctorDTO } from '@pulsepoint/shared';
-import { Star, Clock, Calendar, Award, Globe, Building2, CheckCircle2, ShieldCheck, UserCheck, ChevronRight } from 'lucide-react';
+import { 
+  Star, Clock, Calendar, Award, Globe, Building2, CheckCircle2, 
+  ShieldCheck, UserCheck, ChevronRight, MessageSquare, Video, Sparkles, MapPin 
+} from 'lucide-react';
 import { DoctorProfileModal } from './DoctorProfileModal';
+import { DoctorDirectChatModal } from '../chat/DoctorDirectChatModal';
 
 interface DoctorCardProps {
   doctor: DoctorDTO;
@@ -11,21 +15,29 @@ interface DoctorCardProps {
 
 export const DoctorCard: React.FC<DoctorCardProps> = ({ doctor, onSelect, isSelected }) => {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+  const [isChatModalOpen, setIsChatModalOpen] = useState(false);
 
   const getSpecialtyColor = (specialty: string) => {
     switch (specialty.toLowerCase()) {
-      case 'cardiology': return { bg: '#FEE2E2', text: '#DC2626', border: '#FCA5A5' };
-      case 'neurology': return { bg: '#EDE9FE', text: '#7C3AED', border: '#DDD6FE' };
-      case 'dermatology': return { bg: '#FEF3C7', text: '#D97706', border: '#FDE68A' };
-      case 'orthopedics': return { bg: '#E0F2FE', text: '#0284C7', border: '#BAE6FD' };
-      case 'pediatrics': return { bg: '#FCE7F3', text: '#DB2777', border: '#FBCFE8' };
-      case 'psychiatry': return { bg: '#F3E8FF', text: '#9333EA', border: '#E9D5FF' };
-      case 'endocrinology': return { bg: '#CCFBF1', text: '#0D9488', border: '#99F6E4' };
-      case 'ophthalmology': return { bg: '#E0E7FF', text: '#4F46E5', border: '#C7D2FE' };
-      case 'gynecology': return { bg: '#FFE4E6', text: '#E11D48', border: '#FECDD3' };
-      case 'gastroenterology': return { bg: '#FEF9C3', text: '#CA8A04', border: '#FEF08A' };
-      case 'oncology': return { bg: '#F1F5F9', text: '#475569', border: '#CBD5E1' };
-      default: return { bg: '#E0F2FE', text: '#0369A1', border: '#BAE6FD' };
+      case 'cardiology': return { bg: '#FEE2E2', text: '#DC2626', border: '#FCA5A5', icon: '❤️' };
+      case 'neurology': return { bg: '#EDE9FE', text: '#7C3AED', border: '#DDD6FE', icon: '🧠' };
+      case 'dermatology': return { bg: '#FEF3C7', text: '#D97706', border: '#FDE68A', icon: '🧴' };
+      case 'orthopedics': return { bg: '#E0F2FE', text: '#0284C7', border: '#BAE6FD', icon: '🦴' };
+      case 'pediatrics': return { bg: '#FCE7F3', text: '#DB2777', border: '#FBCFE8', icon: '👶' };
+      case 'psychiatry': return { bg: '#F3E8FF', text: '#9333EA', border: '#E9D5FF', icon: '🧘' };
+      case 'endocrinology': return { bg: '#CCFBF1', text: '#0D9488', border: '#99F6E4', icon: '🧬' };
+      case 'ophthalmology': return { bg: '#E0E7FF', text: '#4F46E5', border: '#C7D2FE', icon: '👁️' };
+      case 'gynecology': return { bg: '#FFE4E6', text: '#E11D48', border: '#FECDD3', icon: '🌸' };
+      case 'gastroenterology': return { bg: '#FEF9C3', text: '#CA8A04', border: '#FEF08A', icon: '🍏' };
+      case 'oncology': return { bg: '#F1F5F9', text: '#334155', border: '#CBD5E1', icon: '🔬' };
+      case 'ent (otolaryngology)': return { bg: '#E0F2FE', text: '#0369A1', border: '#BAE6FD', icon: '👂' };
+      case 'pulmonology': return { bg: '#ECFDF5', text: '#059669', border: '#A7F3D0', icon: '🫁' };
+      case 'rheumatology': return { bg: '#EDE9FE', text: '#6D28D9', border: '#DDD6FE', icon: '🩹' };
+      case 'urology': return { bg: '#E0F2FE', text: '#0284C7', border: '#BAE6FD', icon: '🩺' };
+      case 'allergy & immunology': return { bg: '#FEF3C7', text: '#B45309', border: '#FDE68A', icon: '🌿' };
+      case 'nephrology': return { bg: '#EFF6FF', text: '#1D4ED8', border: '#BFDBFE', icon: '💧' };
+      case 'physical medicine & rehab': return { bg: '#F0FDFA', text: '#0F766E', border: '#99F6E4', icon: '🏃' };
+      default: return { bg: '#E0F2FE', text: '#0369A1', border: '#BAE6FD', icon: '🩺' };
     }
   };
 
@@ -41,110 +53,140 @@ export const DoctorCard: React.FC<DoctorCardProps> = ({ doctor, onSelect, isSele
           flexDirection: 'column',
           justifyContent: 'space-between',
           cursor: 'pointer',
-          border: isSelected ? '2px solid var(--primary-600)' : '1px solid var(--border-light)',
-          background: isSelected ? 'var(--primary-50)' : 'var(--bg-card)',
+          borderRadius: '20px',
+          background: isSelected ? '#F0F9FF' : '#FFFFFF',
+          border: isSelected ? '2px solid #0284C7' : '1px solid #E2E8F0',
           position: 'relative',
-          transition: 'all 0.25s ease'
+          boxShadow: isSelected ? '0 10px 25px -5px rgba(2, 132, 199, 0.25)' : 'var(--shadow-sm)',
+          transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)'
         }}
         onClick={() => onSelect(doctor)}
       >
         <div>
-          {/* Header Avatar & Name */}
-          <div style={{ display: 'flex', gap: '14px', alignItems: 'flex-start', marginBottom: '14px' }}>
-            <div style={{
-              width: '56px',
-              height: '56px',
-              borderRadius: '16px',
-              background: `linear-gradient(135deg, ${specStyle.text}, #0D9488)`,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#FFFFFF',
-              fontSize: '1.35rem',
-              fontWeight: 900,
-              flexShrink: 0,
-              boxShadow: '0 4px 14px rgba(0,0,0,0.12)'
-            }}>
-              {doctor.name.replace('Dr. ', '').charAt(0)}
+          {/* Top Row: Avatar, Name & Live Rating */}
+          <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start', marginBottom: '14px' }}>
+            <div style={{ position: 'relative', flexShrink: 0 }}>
+              <div style={{ 
+                width: '60px', 
+                height: '60px', 
+                borderRadius: '18px', 
+                background: `linear-gradient(135deg, ${specStyle.text}, #0284C7)`,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#FFFFFF',
+                fontSize: '1.45rem',
+                fontWeight: 900,
+                boxShadow: '0 6px 16px rgba(0,0,0,0.12)',
+                border: '2px solid #FFFFFF'
+              }}>
+                {doctor.name.replace('Dr. ', '').charAt(0)}
+              </div>
+              
+              {/* Online indicator */}
+              <div style={{
+                position: 'absolute',
+                bottom: '-2px',
+                right: '-2px',
+                width: '14px',
+                height: '14px',
+                borderRadius: '50%',
+                background: '#10B981',
+                border: '2.5px solid #FFFFFF'
+              }} />
             </div>
 
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-                <span
-                  style={{
-                    fontSize: '0.75rem',
-                    fontWeight: 800,
-                    background: specStyle.bg,
-                    color: specStyle.text,
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap', marginBottom: '4px' }}>
+                <span 
+                  style={{ 
+                    fontSize: '0.75rem', 
+                    fontWeight: 800, 
+                    background: specStyle.bg, 
+                    color: specStyle.text, 
                     border: `1px solid ${specStyle.border}`,
-                    padding: '2px 8px',
-                    borderRadius: '6px'
+                    padding: '3px 8px', 
+                    borderRadius: '6px',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '4px'
                   }}
                 >
-                  {doctor.specialization}
+                  <span>{specStyle.icon}</span>
+                  <span>{doctor.specialization}</span>
                 </span>
-                <span style={{ fontSize: '0.7rem', color: '#10B981', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '2px' }}>
-                  <CheckCircle2 size={12} /> Top Rated MD
+                
+                <span style={{ fontSize: '0.72rem', color: '#059669', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '3px', background: '#ECFDF5', padding: '2px 7px', borderRadius: '4px' }}>
+                  <ShieldCheck size={12} /> Board-Certified
                 </span>
               </div>
 
-              <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--text-main)', marginTop: '4px', lineHeight: 1.3 }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-main)', lineHeight: 1.25, margin: 0 }}>
                 {doctor.name}
               </h3>
+
+              {doctor.hospitalAffiliation && (
+                <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '4px', marginTop: '3px' }}>
+                  <Building2 size={12} color="#0284C7" />
+                  <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{doctor.hospitalAffiliation}</span>
+                </div>
+              )}
             </div>
 
             {/* Rating Badge */}
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px',
-              background: '#FEF3C7',
-              padding: '4px 8px',
-              borderRadius: '8px',
-              color: '#B45309',
-              fontWeight: 800,
-              fontSize: '0.85rem'
+            <div style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '4px', 
+              background: '#FEF3C7', 
+              padding: '5px 9px', 
+              borderRadius: '10px', 
+              color: '#B45309', 
+              fontWeight: 800, 
+              fontSize: '0.875rem',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+              flexShrink: 0
             }}>
               <Star size={14} fill="#F59E0B" color="#F59E0B" />
               {doctor.rating ? doctor.rating.toFixed(2) : '4.95'}
             </div>
           </div>
 
-          {/* Bio description */}
-          <p style={{
-            fontSize: '0.875rem',
-            color: 'var(--text-muted)',
-            lineHeight: 1.5,
-            marginBottom: '16px',
-            display: '-webkit-box',
-            WebkitLineClamp: 3,
-            WebkitBoxOrient: 'vertical',
-            overflow: 'hidden'
+          {/* Bio Description */}
+          <p style={{ 
+            fontSize: '0.875rem', 
+            color: 'var(--text-muted)', 
+            lineHeight: 1.55, 
+            marginBottom: '16px', 
+            display: '-webkit-box', 
+            WebkitLineClamp: 2, 
+            WebkitBoxOrient: 'vertical', 
+            overflow: 'hidden' 
           }}>
             {doctor.bio}
           </p>
 
-          {/* Stats Grid */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: '10px',
-            padding: '12px',
-            background: 'var(--bg-subtle)',
-            borderRadius: '10px',
-            marginBottom: '16px'
+          {/* Highlights Grid */}
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: '1fr 1fr', 
+            gap: '8px', 
+            padding: '10px 14px', 
+            background: 'var(--bg-subtle)', 
+            borderRadius: '12px', 
+            marginBottom: '14px' 
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.8rem', color: 'var(--text-main)', fontWeight: 600 }}>
-              <Award size={15} color="var(--primary-600)" />
-              <span>{doctor.experienceYears || 10}+ Yrs Practicing</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.78rem', color: 'var(--text-main)', fontWeight: 700 }}>
+              <Award size={14} color="#0284C7" />
+              <span>{doctor.experienceYears || 12}+ Yrs Experience</span>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.8rem', color: 'var(--text-main)', fontWeight: 600 }}>
-              <Clock size={15} color="var(--primary-600)" />
-              <span>{doctor.slotDurationMinutes} min / slot</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.78rem', color: 'var(--text-main)', fontWeight: 700 }}>
+              <Video size={14} color="#0D9488" />
+              <span>HD Video & In-Clinic</span>
             </div>
           </div>
 
-          {/* Career & Credentials Button */}
+          {/* Career & Achievements Button */}
           <button
             onClick={(e) => {
               e.stopPropagation();
@@ -153,13 +195,13 @@ export const DoctorCard: React.FC<DoctorCardProps> = ({ doctor, onSelect, isSele
             className="pulse-btn"
             style={{
               width: '100%',
-              padding: '7px 12px',
+              padding: '8px 12px',
               fontSize: '0.8rem',
               fontWeight: 700,
-              color: 'var(--primary-700)',
-              background: 'var(--primary-50)',
-              border: '1px solid var(--primary-200)',
-              borderRadius: '8px',
+              color: '#0369A1',
+              background: '#EFF6FF',
+              border: '1px solid #BFDBFE',
+              borderRadius: '10px',
               marginBottom: '16px',
               display: 'flex',
               alignItems: 'center',
@@ -167,40 +209,68 @@ export const DoctorCard: React.FC<DoctorCardProps> = ({ doctor, onSelect, isSele
               gap: '6px'
             }}
           >
-            <UserCheck size={14} />
-            <span>View Career Achievements & Reviews</span>
+            <UserCheck size={14} color="#0284C7" />
+            <span>View Career Achievements & Patient Reviews</span>
             <ChevronRight size={14} />
           </button>
         </div>
 
         {/* Footer Fee & Selection */}
-        <div style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          borderTop: '1px solid var(--border-light)',
-          paddingTop: '16px'
+        <div style={{ 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          alignItems: 'center', 
+          borderTop: '1px solid var(--border-light)', 
+          paddingTop: '14px',
+          gap: '10px',
+          flexWrap: 'wrap'
         }}>
           <div>
-            <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700 }}>
+            <span style={{ fontSize: '0.68rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.04em' }}>
               Consultation Fee
             </span>
-            <div style={{ fontSize: '1.3rem', fontWeight: 900, color: 'var(--primary-700)' }}>
-              ${doctor.consultationFee}
+            <div style={{ fontSize: '1.35rem', fontWeight: 900, color: '#0369A1', fontFamily: 'var(--font-display)', lineHeight: 1.1 }}>
+              ${doctor.consultationFee} <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 600 }}>/ 30 min</span>
             </div>
           </div>
 
-          <button
-            className={`pulse-btn ${isSelected ? 'pulse-btn-primary' : 'pulse-btn-secondary'}`}
-            style={{ padding: '8px 18px', fontSize: '0.875rem', fontWeight: 800 }}
-            onClick={(e) => {
-              e.stopPropagation();
-              onSelect(doctor);
-            }}
-          >
-            <Calendar size={16} />
-            {isSelected ? 'Selected' : 'Book Visit'}
-          </button>
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+            <button
+              type="button"
+              className="pulse-btn"
+              style={{
+                padding: '8px 13px',
+                fontSize: '0.8rem',
+                fontWeight: 700,
+                color: '#0284C7',
+                background: '#FFFFFF',
+                border: '1.5px solid #BAE6FD',
+                borderRadius: '10px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '5px'
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsChatModalOpen(true);
+              }}
+            >
+              <MessageSquare size={14} color="#0284C7" />
+              <span>Message</span>
+            </button>
+
+            <button
+              className={`pulse-btn ${isSelected ? 'pulse-btn-primary' : 'pulse-btn-secondary'}`}
+              style={{ padding: '8px 16px', fontSize: '0.85rem', fontWeight: 800, borderRadius: '10px' }}
+              onClick={(e) => {
+                e.stopPropagation();
+                onSelect(doctor);
+              }}
+            >
+              <Calendar size={15} />
+              {isSelected ? 'Selected' : 'Book Visit'}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -212,6 +282,22 @@ export const DoctorCard: React.FC<DoctorCardProps> = ({ doctor, onSelect, isSele
           onBook={(doc) => {
             onSelect(doc);
             setIsProfileModalOpen(false);
+          }}
+          onOpenMessage={() => {
+            setIsProfileModalOpen(false);
+            setIsChatModalOpen(true);
+          }}
+        />
+      )}
+
+      {/* Doctor Direct Chat Modal */}
+      {isChatModalOpen && (
+        <DoctorDirectChatModal
+          doctor={doctor}
+          onClose={() => setIsChatModalOpen(false)}
+          onBookAppointment={(doc) => {
+            setIsChatModalOpen(false);
+            onSelect(doc);
           }}
         />
       )}

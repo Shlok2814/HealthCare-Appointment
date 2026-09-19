@@ -9,12 +9,14 @@ interface DoctorProfileModalProps {
   doctor: DoctorDTO;
   onClose: () => void;
   onBook: (doctor: DoctorDTO) => void;
+  onOpenMessage?: () => void;
 }
 
 export const DoctorProfileModal: React.FC<DoctorProfileModalProps> = ({
   doctor,
   onClose,
-  onBook
+  onBook,
+  onOpenMessage
 }) => {
   // Default fallback career achievements if not present
   const achievements = doctor.achievements || [
@@ -179,29 +181,54 @@ export const DoctorProfileModal: React.FC<DoctorProfileModalProps> = ({
               </div>
             </div>
 
-            <button
-              onClick={() => {
-                onBook(doctor);
-                onClose();
-              }}
-              className="pulse-btn"
-              style={{
-                background: '#0284C7',
-                color: '#FFF',
-                padding: '12px 24px',
-                borderRadius: '12px',
-                fontWeight: 800,
-                fontSize: '0.95rem',
-                border: 'none',
-                boxShadow: '0 4px 15px rgba(2, 132, 199, 0.4)',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px'
-              }}
-            >
-              <Calendar size={18} /> Book Appointment
-            </button>
+            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+              {onOpenMessage && (
+                <button
+                  type="button"
+                  onClick={onOpenMessage}
+                  className="pulse-btn"
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.15)',
+                    color: '#FFF',
+                    border: '1px solid rgba(255, 255, 255, 0.3)',
+                    padding: '12px 20px',
+                    borderRadius: '12px',
+                    fontWeight: 700,
+                    fontSize: '0.9rem',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px'
+                  }}
+                >
+                  <MessageSquare size={16} /> Direct Message
+                </button>
+              )}
+
+              <button
+                onClick={() => {
+                  onBook(doctor);
+                  onClose();
+                }}
+                className="pulse-btn"
+                style={{
+                  background: '#0284C7',
+                  color: '#FFF',
+                  padding: '12px 24px',
+                  borderRadius: '12px',
+                  fontWeight: 800,
+                  fontSize: '0.95rem',
+                  border: 'none',
+                  boxShadow: '0 4px 15px rgba(2, 132, 199, 0.4)',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}
+              >
+                <Calendar size={18} /> Book Appointment
+              </button>
+            </div>
           </div>
         </div>
 
@@ -379,10 +406,30 @@ export const DoctorProfileModal: React.FC<DoctorProfileModalProps> = ({
             </div>
           </div>
 
-          <div style={{ display: 'flex', gap: '12px' }}>
+          <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
             <button onClick={onClose} className="pulse-btn pulse-btn-secondary" style={{ padding: '10px 18px' }}>
               Close
             </button>
+            {onOpenMessage && (
+              <button 
+                type="button"
+                onClick={onOpenMessage} 
+                className="pulse-btn" 
+                style={{ 
+                  padding: '10px 20px', 
+                  fontWeight: 700,
+                  background: '#FFFFFF',
+                  color: 'var(--primary-700)',
+                  border: '1.5px solid var(--primary-300)',
+                  borderRadius: '10px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px'
+                }}
+              >
+                <MessageSquare size={16} color="var(--primary-600)" /> Direct Message
+              </button>
+            )}
             <button
               onClick={() => {
                 onBook(doctor);

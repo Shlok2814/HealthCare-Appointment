@@ -5,11 +5,13 @@ import { DoctorCard } from '../components/booking/DoctorCard';
 import { SlotPicker } from '../components/booking/SlotPicker';
 import { SymptomTriageModal } from '../components/booking/SymptomTriageModal';
 import { EmergencyUrgentModal } from '../components/common/EmergencyUrgentModal';
+import { DoctorDirectChatModal } from '../components/chat/DoctorDirectChatModal';
 import { useAuth } from '../context/AuthContext';
-import {
-  HeartPulse, Search, Shield, Zap, Sparkles, CheckCircle2,
-  Calendar, Stethoscope, ArrowRight, Activity, SlidersHorizontal,
-  Tag, Video, Clock, Star, PhoneCall
+import { 
+  HeartPulse, Search, Shield, Zap, Sparkles, CheckCircle2, 
+  Calendar, Stethoscope, ArrowRight, Activity, SlidersHorizontal, 
+  Tag, Video, Clock, Star, PhoneCall, MessageSquare, Pill, 
+  Lock, Award, ShieldCheck, HelpCircle, FileText
 } from 'lucide-react';
 
 interface LandingPageProps {
@@ -26,29 +28,30 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
   const [selectedSlot, setSelectedSlot] = useState<AvailableSlot | null>(null);
   const [isTriageModalOpen, setIsTriageModalOpen] = useState<boolean>(false);
   const [isEmergencyModalOpen, setIsEmergencyModalOpen] = useState<boolean>(false);
+  const [isDoctorChatOpen, setIsDoctorChatOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [bookingSuccessNotice, setBookingSuccessNotice] = useState<string | null>(null);
 
   const specialties = [
-    'All Specialties',
-    'Cardiology',
-    'Neurology',
-    'Dermatology',
-    'Orthopedics',
-    'Pediatrics',
-    'Psychiatry',
-    'Endocrinology',
-    'Ophthalmology',
-    'Gynecology',
-    'Gastroenterology',
-    'Oncology',
-    'ENT (Otolaryngology)',
-    'Pulmonology',
-    'Rheumatology',
-    'Urology',
-    'Allergy & Immunology',
-    'Nephrology',
-    'Physical Medicine & Rehab'
+    { name: 'All Specialties', icon: '🩺' },
+    { name: 'Cardiology', icon: '❤️' },
+    { name: 'Neurology', icon: '🧠' },
+    { name: 'Dermatology', icon: '🧴' },
+    { name: 'Orthopedics', icon: '🦴' },
+    { name: 'Pediatrics', icon: '👶' },
+    { name: 'Psychiatry', icon: '🧘' },
+    { name: 'Endocrinology', icon: '🧬' },
+    { name: 'Ophthalmology', icon: '👁️' },
+    { name: 'Gynecology', icon: '🌸' },
+    { name: 'Gastroenterology', icon: '🍏' },
+    { name: 'Oncology', icon: '🔬' },
+    { name: 'ENT (Otolaryngology)', icon: '👂' },
+    { name: 'Pulmonology', icon: '🫁' },
+    { name: 'Rheumatology', icon: '🩹' },
+    { name: 'Urology', icon: '🩺' },
+    { name: 'Allergy & Immunology', icon: '🌿' },
+    { name: 'Nephrology', icon: '💧' },
+    { name: 'Physical Medicine & Rehab', icon: '🏃' }
   ];
 
   const popularSymptoms = [
@@ -63,10 +66,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
     { label: 'Arthritis & Autoimmune', specialty: 'Rheumatology' },
     { label: 'Kidney Stones & Urinary', specialty: 'Urology' },
     { label: 'Food & Seasonal Allergy', specialty: 'Allergy & Immunology' },
-    { label: 'Sports Spine & Muscle Rehab', specialty: 'Physical Medicine & Rehab' },
+    { label: 'Sports Spine Rehab', specialty: 'Physical Medicine & Rehab' },
     { label: 'Eye Strain & Vision', specialty: 'Ophthalmology' },
     { label: 'Acid Reflux & Gut', specialty: 'Gastroenterology' },
-    { label: 'Sinus & Allergy', specialty: 'ENT (Otolaryngology)' }
+    { label: 'Sinus & Ear Pain', specialty: 'ENT (Otolaryngology)' }
   ];
 
   const fetchDoctors = async () => {
@@ -125,100 +128,176 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
   };
 
   return (
-    <div style={{ paddingBottom: '60px' }}>
+    <div style={{ paddingBottom: '80px' }}>
       {/* Hero Section */}
       <section style={{
-        background: 'linear-gradient(135deg, #F0FDFA 0%, #EEF2FF 40%, #FAF5FF 100%)',
-        padding: '60px 24px 70px',
-        borderBottom: '1px solid var(--border-light)',
-        textAlign: 'center'
+        background: 'linear-gradient(135deg, #F0FDFA 0%, #F0F9FF 35%, #FAF5FF 100%)',
+        padding: '68px 24px 80px',
+        borderBottom: '1px solid rgba(226, 232, 240, 0.8)',
+        textAlign: 'center',
+        position: 'relative',
+        overflow: 'hidden'
       }}>
-        <div style={{ maxWidth: '960px', margin: '0 auto' }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: '#FFFFFF', padding: '6px 16px', borderRadius: '20px', border: '1px solid var(--primary-200)', boxShadow: 'var(--shadow-sm)', marginBottom: '20px' }}>
+        {/* Ambient radial lighting */}
+        <div style={{
+          position: 'absolute',
+          top: '-15%',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: '700px',
+          height: '400px',
+          background: 'radial-gradient(circle, rgba(2, 132, 199, 0.15) 0%, rgba(13, 148, 136, 0.08) 50%, transparent 80%)',
+          pointerEvents: 'none'
+        }} />
+
+        <div style={{ maxWidth: '1020px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
+          <div style={{ 
+            display: 'inline-flex', 
+            alignItems: 'center', 
+            gap: '8px', 
+            background: '#FFFFFF', 
+            padding: '7px 18px', 
+            borderRadius: '30px', 
+            border: '1px solid #BAE6FD', 
+            boxShadow: '0 2px 10px rgba(2, 132, 199, 0.12)', 
+            marginBottom: '22px' 
+          }}>
             <span className="live-indicator" />
-            <span style={{ fontSize: '0.8rem', fontWeight: 800, color: 'var(--primary-800)', letterSpacing: '0.02em' }}>
-              PULSEPOINT CLINICAL CLOUD • 12+ BOARD CERTIFIED SPECIALTIES
+            <span style={{ fontSize: '0.825rem', fontWeight: 800, color: '#0369A1', letterSpacing: '0.02em' }}>
+              PULSEPOINT CLINICAL CLOUD • 18 SPECIALTIES • ZERO DOUBLE-BOOKING GUARANTEE
             </span>
           </div>
 
-          <h1 style={{ fontSize: '3rem', fontWeight: 900, color: 'var(--text-main)', letterSpacing: '-0.03em', lineHeight: 1.15, marginBottom: '20px' }}>
-            Book Top Healthcare Specialists with <span style={{ color: 'var(--primary-600)' }}>Zero Double-Booking</span> & AI Triage
+          <h1 style={{ 
+            fontSize: '3.3rem', 
+            fontWeight: 900, 
+            color: 'var(--text-main)', 
+            letterSpacing: '-0.035em', 
+            lineHeight: 1.15, 
+            marginBottom: '22px',
+            fontFamily: 'var(--font-display)'
+          }}>
+            Connect with World-Class Doctors with <span style={{ 
+              background: 'linear-gradient(135deg, #0284C7 0%, #0D9488 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent'
+            }}>Instant Slot Lock</span> & AI Clinical Triage
           </h1>
 
-          <p style={{ fontSize: '1.15rem', color: 'var(--text-muted)', lineHeight: 1.6, maxWidth: '760px', margin: '0 auto 32px' }}>
-            Experience modern medicine: instant slot holds, AI pre-visit intake assessments, telehealth virtual exam rooms, and automatic medication vaults.
+          <p style={{ fontSize: '1.15rem', color: '#475569', lineHeight: 1.65, maxWidth: '780px', margin: '0 auto 36px', fontWeight: 500 }}>
+            Experience seamless modern medicine: 5-minute atomic slot holds, AI pre-visit intake assessments, encrypted HD WebRTC exam rooms, and automatic prescription vaults.
           </p>
 
           <div style={{ display: 'flex', justifyContent: 'center', gap: '14px', flexWrap: 'wrap' }}>
-            <a href="#booking-directory" className="pulse-btn pulse-btn-primary" style={{ padding: '14px 28px', fontSize: '1rem', fontWeight: 700 }}>
-              <Calendar size={18} /> Find & Book Doctor
+            <a 
+              href="#booking-directory" 
+              className="pulse-btn pulse-btn-primary" 
+              style={{ padding: '14px 30px', fontSize: '1.02rem', borderRadius: '14px' }}
+            >
+              <Calendar size={19} /> Find & Book Doctor
             </a>
-            <button
+            
+            <button 
               onClick={() => setIsEmergencyModalOpen(true)}
               className="pulse-btn"
-              style={{
-                background: '#FEE2E2',
-                color: '#DC2626',
-                border: '1px solid #FCA5A5',
-                padding: '14px 22px',
-                fontSize: '1rem',
-                fontWeight: 700,
+              style={{ 
+                background: '#FEF2F2', 
+                color: '#DC2626', 
+                border: '1.5px solid #FCA5A5', 
+                padding: '14px 24px', 
+                fontSize: '1.02rem', 
+                fontWeight: 800,
+                borderRadius: '14px',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '8px'
+                gap: '8px',
+                boxShadow: '0 2px 8px rgba(220, 38, 38, 0.12)'
               }}
             >
               <PhoneCall size={18} /> 24/7 Urgent Care SOS
             </button>
+            
             {!user && (
-              <button onClick={() => onNavigate('login')} className="pulse-btn pulse-btn-secondary" style={{ padding: '14px 22px', fontSize: '1rem' }}>
-                <Stethoscope size={18} /> Clinician Login
+              <button 
+                onClick={() => onNavigate('login')} 
+                className="pulse-btn pulse-btn-secondary" 
+                style={{ padding: '14px 24px', fontSize: '1.02rem', borderRadius: '14px' }}
+              >
+                <Stethoscope size={18} color="#0284C7" /> Clinician Portal
               </button>
             )}
+          </div>
+
+          {/* Social Proof Trust Bar */}
+          <div style={{ 
+            marginTop: '36px', 
+            display: 'flex', 
+            justifyContent: 'center', 
+            alignItems: 'center', 
+            gap: '24px', 
+            flexWrap: 'wrap',
+            color: '#64748B',
+            fontSize: '0.85rem',
+            fontWeight: 600
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <Star size={16} fill="#F59E0B" color="#F59E0B" />
+              <span><strong style={{ color: '#0F172A' }}>4.98 / 5.0</strong> (120k+ Verified Encounters)</span>
+            </div>
+            <span>•</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <ShieldCheck size={16} color="#10B981" />
+              <span>100% HIPAA & SOC-2 Certified</span>
+            </div>
+            <span>•</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <Award size={16} color="#0284C7" />
+              <span>Top 1% Board-Certified Specialists</span>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Feature Highlights Grid */}
-      <section style={{ maxWidth: '1280px', margin: '-28px auto 40px', padding: '0 24px' }}>
-        <div className="pulse-glass" style={{ borderRadius: '18px', padding: '24px 32px', boxShadow: 'var(--shadow-md)', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px' }}>
+      <section style={{ maxWidth: '1280px', margin: '-32px auto 40px', padding: '0 24px', position: 'relative', zIndex: 10 }}>
+        <div className="pulse-glass" style={{ borderRadius: '22px', padding: '24px 32px', boxShadow: '0 10px 30px -5px rgba(15, 23, 42, 0.1)', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-            <div style={{ background: 'var(--primary-50)', color: 'var(--primary-600)', padding: '12px', borderRadius: '12px' }}>
-              <Shield size={24} />
+            <div style={{ background: '#EFF6FF', color: '#0284C7', padding: '14px', borderRadius: '14px' }}>
+              <Lock size={24} />
             </div>
             <div>
               <h4 style={{ fontSize: '0.95rem', fontWeight: 800, color: 'var(--text-main)' }}>5-Min Slot Lock Hold</h4>
-              <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Zero double-booking checkout guarantee</p>
+              <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Zero double-booking guarantee</p>
             </div>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-            <div style={{ background: 'var(--accent-50)', color: 'var(--accent-600)', padding: '12px', borderRadius: '12px' }}>
+            <div style={{ background: '#F0FDFA', color: '#0D9488', padding: '14px', borderRadius: '14px' }}>
               <Sparkles size={24} />
             </div>
             <div>
               <h4 style={{ fontSize: '0.95rem', fontWeight: 800, color: 'var(--text-main)' }}>AI Symptom Intake</h4>
-              <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Real-time acuity triage & doctor prompts</p>
+              <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Acuity triage & doctor prep prompts</p>
             </div>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-            <div style={{ background: '#EDE9FE', color: '#7C3AED', padding: '12px', borderRadius: '12px' }}>
+            <div style={{ background: '#EDE9FE', color: '#7C3AED', padding: '14px', borderRadius: '14px' }}>
               <Video size={24} />
             </div>
             <div>
               <h4 style={{ fontSize: '0.95rem', fontWeight: 800, color: 'var(--text-main)' }}>HD Telehealth Rooms</h4>
-              <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>HIPAA encrypted video & clinical chat</p>
+              <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Encrypted video & live chat</p>
             </div>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-            <div style={{ background: 'var(--success-bg)', color: 'var(--success-text)', padding: '12px', borderRadius: '12px' }}>
-              <Zap size={24} />
+            <div style={{ background: '#ECFDF5', color: '#059669', padding: '14px', borderRadius: '14px' }}>
+              <Pill size={24} />
             </div>
             <div>
-              <h4 style={{ fontSize: '0.95rem', fontWeight: 800, color: 'var(--text-main)' }}>Auto Leave Resolver</h4>
-              <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Proactive conflict cancellation sweeps</p>
+              <h4 style={{ fontSize: '0.95rem', fontWeight: 800, color: 'var(--text-main)' }}>Digital Rx Vault</h4>
+              <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Instant printable prescriptions</p>
             </div>
           </div>
         </div>
@@ -227,15 +306,15 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
       {/* Booking Success Notice */}
       {bookingSuccessNotice && (
         <div style={{ maxWidth: '1280px', margin: '0 auto 24px', padding: '0 24px' }}>
-          <div style={{ background: 'var(--success-bg)', border: '1.5px solid var(--success-border)', padding: '16px 20px', borderRadius: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: 'var(--success-text)' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <CheckCircle2 size={20} />
-              <span style={{ fontWeight: 700, fontSize: '0.95rem' }}>{bookingSuccessNotice}</span>
+          <div style={{ background: 'var(--success-bg)', border: '1.5px solid var(--success-border)', padding: '18px 24px', borderRadius: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: 'var(--success-text)', boxShadow: 'var(--shadow-sm)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <CheckCircle2 size={24} />
+              <span style={{ fontWeight: 800, fontSize: '0.95rem' }}>{bookingSuccessNotice}</span>
             </div>
             <button
               onClick={() => onNavigate('patient')}
               className="pulse-btn pulse-btn-primary"
-              style={{ padding: '6px 16px', fontSize: '0.85rem' }}
+              style={{ padding: '8px 18px', fontSize: '0.85rem' }}
             >
               Go to Care Portal <ArrowRight size={14} />
             </button>
@@ -246,13 +325,18 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
       {/* Doctor Directory Section */}
       <section id="booking-directory" style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 24px' }}>
         {/* Search & Sort Header */}
-        <div style={{ marginBottom: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '16px' }}>
+        <div style={{ marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '18px' }}>
           <div>
-            <h2 style={{ fontSize: '2rem', fontWeight: 900, color: 'var(--text-main)', letterSpacing: '-0.02em' }}>
-              Find Top Medical Specialists ({doctors.length})
-            </h2>
-            <p style={{ fontSize: '0.95rem', color: 'var(--text-muted)', marginTop: '2px' }}>
-              Filter by medical department or search symptoms to connect with verified specialists.
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+              <h2 style={{ fontSize: '2.1rem', fontWeight: 900, color: 'var(--text-main)', letterSpacing: '-0.025em' }}>
+                Board-Certified Medical Specialists ({doctors.length})
+              </h2>
+              <span style={{ background: '#CCFBF1', color: '#0F766E', fontSize: '0.75rem', fontWeight: 800, padding: '3px 9px', borderRadius: '12px' }}>
+                18 Domains Available
+              </span>
+            </div>
+            <p style={{ fontSize: '0.95rem', color: 'var(--text-muted)', margin: 0 }}>
+              Select a medical domain or search your specific symptoms to connect with verified attending clinicians.
             </p>
           </div>
 
@@ -261,20 +345,22 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
             <div style={{ position: 'relative' }}>
               <input
                 type="text"
-                placeholder="Search physician, disease, or symptom..."
+                placeholder="Search physician, domain, or symptom..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 style={{
-                  padding: '10px 14px 10px 38px',
-                  borderRadius: '10px',
+                  padding: '11px 16px 11px 40px',
+                  borderRadius: '12px',
                   border: '1.5px solid var(--border-strong)',
                   fontSize: '0.875rem',
                   fontFamily: 'var(--font-family)',
-                  minWidth: '280px',
-                  background: '#FFFFFF'
+                  minWidth: '290px',
+                  background: '#FFFFFF',
+                  outline: 'none',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.03)'
                 }}
               />
-              <Search size={16} color="var(--text-light)" style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)' }} />
+              <Search size={17} color="#0284C7" style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)' }} />
             </div>
 
             {/* Sort Dropdown */}
@@ -284,17 +370,18 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
                 value={sortBy}
                 onChange={(e: any) => setSortBy(e.target.value)}
                 style={{
-                  padding: '10px 12px',
-                  borderRadius: '10px',
+                  padding: '11px 14px',
+                  borderRadius: '12px',
                   border: '1.5px solid var(--border-strong)',
                   fontSize: '0.875rem',
                   background: '#FFFFFF',
                   color: 'var(--text-main)',
-                  fontWeight: 600,
-                  cursor: 'pointer'
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  outline: 'none'
                 }}
               >
-                <option value="rating">Top Rated (⭐)</option>
+                <option value="rating">Top Rated (⭐ 4.9+)</option>
                 <option value="fee_asc">Lowest Consultation Fee ($)</option>
                 <option value="experience">Most Experienced (Yrs)</option>
               </select>
@@ -303,9 +390,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
         </div>
 
         {/* Popular Symptoms Quick Chips */}
-        <div style={{ marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+        <div style={{ marginBottom: '18px', display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
           <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <Tag size={13} /> Common Symptoms:
+            <Tag size={13} color="#0284C7" /> Quick Symptoms:
           </span>
           {popularSymptoms.map((sym, idx) => (
             <button
@@ -315,15 +402,16 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
                 setSearchTerm('');
               }}
               style={{
-                background: 'var(--bg-subtle)',
-                border: '1px solid var(--border-light)',
-                borderRadius: '14px',
-                padding: '3px 10px',
+                background: selectedSpecialty === sym.specialty ? '#0284C7' : '#FFFFFF',
+                border: selectedSpecialty === sym.specialty ? '1px solid #0284C7' : '1px solid #CBD5E1',
+                borderRadius: '16px',
+                padding: '4px 12px',
                 fontSize: '0.75rem',
-                fontWeight: 600,
-                color: 'var(--text-main)',
+                fontWeight: 700,
+                color: selectedSpecialty === sym.specialty ? '#FFFFFF' : '#334155',
                 cursor: 'pointer',
-                transition: 'all 0.15s ease'
+                transition: 'all 0.15s ease',
+                boxShadow: '0 1px 2px rgba(0,0,0,0.04)'
               }}
             >
               {sym.label}
@@ -332,38 +420,47 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
         </div>
 
         {/* Specialty Filter Pills Carousel */}
-        <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '16px', marginBottom: '24px' }}>
+        <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '16px', marginBottom: '28px' }}>
           {specialties.map((spec) => {
-            const isActive = selectedSpecialty === spec;
+            const isActive = selectedSpecialty === spec.name;
             return (
               <button
-                key={spec}
-                onClick={() => setSelectedSpecialty(spec)}
+                key={spec.name}
+                onClick={() => setSelectedSpecialty(spec.name)}
                 className="pulse-btn"
                 style={{
                   fontSize: '0.85rem',
-                  fontWeight: 700,
-                  padding: '8px 18px',
-                  borderRadius: '24px',
+                  fontWeight: 800,
+                  padding: '9px 18px',
+                  borderRadius: '30px',
                   whiteSpace: 'nowrap',
-                  background: isActive ? 'var(--primary-600)' : '#FFFFFF',
+                  background: isActive ? 'linear-gradient(135deg, #0284C7 0%, #0D9488 100%)' : '#FFFFFF',
                   color: isActive ? '#FFFFFF' : 'var(--text-main)',
-                  border: isActive ? '1px solid var(--primary-600)' : '1px solid var(--border-strong)',
-                  boxShadow: isActive ? '0 2px 8px rgba(2, 132, 199, 0.3)' : 'none'
+                  border: isActive ? '1px solid #0284C7' : '1.5px solid #CBD5E1',
+                  boxShadow: isActive ? '0 4px 12px rgba(2, 132, 199, 0.35)' : 'none',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px'
                 }}
               >
-                {spec}
+                <span>{spec.icon}</span>
+                <span>{spec.name}</span>
               </button>
             );
           })}
         </div>
 
-        {/* Main Grid: Doctors list & Live Slot Picker */}
-        <div style={{ display: 'grid', gridTemplateColumns: selectedDoctor ? '1.1fr 0.9fr' : '1fr', gap: '28px' }}>
+        {/* Main Grid: Doctors List & Sticky Slot Picker */}
+        <div style={{ display: 'grid', gridTemplateColumns: selectedDoctor ? '1.15fr 0.85fr' : '1fr', gap: '28px' }}>
           <div>
-            <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '16px' }}>
-              {selectedSpecialty === 'All Specialties' ? 'All Verified Physicians' : `${selectedSpecialty} Specialists`}
-            </h3>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+              <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--text-main)', margin: 0 }}>
+                {selectedSpecialty === 'All Specialties' ? 'All Verified Physicians' : `${selectedSpecialty} Specialists`}
+              </h3>
+              <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600 }}>
+                Showing {doctors.length} clinician{doctors.length === 1 ? '' : 's'}
+              </span>
+            </div>
 
             {isLoading ? (
               <div style={{ padding: '60px', textAlign: 'center', color: 'var(--text-muted)' }}>
@@ -371,19 +468,19 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
                 Loading specialists and schedules...
               </div>
             ) : doctors.length === 0 ? (
-              <div style={{ padding: '48px', textAlign: 'center', background: 'var(--bg-subtle)', borderRadius: '14px', color: 'var(--text-muted)' }}>
-                <p style={{ fontWeight: 700, fontSize: '1rem', marginBottom: '6px' }}>No physicians found.</p>
-                <p style={{ fontSize: '0.85rem' }}>Try clearing your search query or selecting "All Specialties".</p>
-                <button
+              <div style={{ padding: '48px', textAlign: 'center', background: '#FFFFFF', border: '1px solid var(--border-light)', borderRadius: '16px', color: 'var(--text-muted)' }}>
+                <p style={{ fontWeight: 800, fontSize: '1.1rem', marginBottom: '6px', color: 'var(--text-main)' }}>No matching physicians found.</p>
+                <p style={{ fontSize: '0.875rem' }}>Try clearing your search query or selecting "All Specialties".</p>
+                <button 
                   onClick={() => { setSelectedSpecialty('All Specialties'); setSearchTerm(''); }}
                   className="pulse-btn pulse-btn-secondary"
-                  style={{ marginTop: '14px', fontSize: '0.85rem' }}
+                  style={{ marginTop: '16px', fontSize: '0.85rem' }}
                 >
                   Reset Filters
                 </button>
               </div>
             ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
                 {doctors.map((doc) => (
                   <DoctorCard
                     key={doc.id}
@@ -398,7 +495,69 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
 
           {/* Slot Picker for Selected Doctor */}
           {selectedDoctor && (
-            <div style={{ position: 'sticky', top: '90px' }}>
+            <div style={{ position: 'sticky', top: '90px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              {/* Doctor Quick Action Card */}
+              <div style={{
+                background: '#FFFFFF',
+                borderRadius: '18px',
+                padding: '18px 22px',
+                border: '1.5px solid #BAE6FD',
+                boxShadow: '0 4px 15px rgba(2, 132, 199, 0.08)',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                gap: '12px',
+                flexWrap: 'wrap'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <div style={{
+                    width: '42px',
+                    height: '42px',
+                    borderRadius: '12px',
+                    background: 'linear-gradient(135deg, #0284C7, #0D9488)',
+                    color: '#FFF',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontWeight: 900,
+                    fontSize: '1.1rem',
+                    boxShadow: '0 2px 8px rgba(2, 132, 199, 0.3)'
+                  }}>
+                    {selectedDoctor.name.replace('Dr. ', '').charAt(0)}
+                  </div>
+                  <div>
+                    <div style={{ fontWeight: 800, fontSize: '0.95rem', color: 'var(--text-main)' }}>
+                      {selectedDoctor.name}
+                    </div>
+                    <div style={{ fontSize: '0.78rem', color: '#0284C7', fontWeight: 700 }}>
+                      {selectedDoctor.specialization} • ${selectedDoctor.consultationFee} / consult
+                    </div>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setIsDoctorChatOpen(true)}
+                  className="pulse-btn"
+                  style={{
+                    padding: '7px 14px',
+                    fontSize: '0.8rem',
+                    fontWeight: 700,
+                    background: '#EFF6FF',
+                    color: '#0284C7',
+                    border: '1px solid #BFDBFE',
+                    borderRadius: '10px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <MessageSquare size={14} color="#0284C7" />
+                  <span>Message Doctor</span>
+                </button>
+              </div>
+
               <SlotPicker
                 doctorId={selectedDoctor.id}
                 doctorName={selectedDoctor.name}
@@ -417,6 +576,18 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
           slot={selectedSlot}
           onClose={() => setIsTriageModalOpen(false)}
           onConfirmSuccess={handleBookingSuccess}
+        />
+      )}
+
+      {/* Direct Doctor Chat Modal */}
+      {isDoctorChatOpen && selectedDoctor && (
+        <DoctorDirectChatModal
+          doctor={selectedDoctor}
+          onClose={() => setIsDoctorChatOpen(false)}
+          onBookAppointment={(doc) => {
+            setIsDoctorChatOpen(false);
+            setSelectedDoctor(doc);
+          }}
         />
       )}
 

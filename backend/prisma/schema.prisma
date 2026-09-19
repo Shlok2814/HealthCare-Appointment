@@ -1,0 +1,224 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  PATIENT
+  DOCTOR
+  ADMIN
+}
+
+enum AppointmentStatus {
+  HELD
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+  NO_SHOW
+}
+
+enum UrgencyLevel {
+  ROUTINE
+  MODERATE
+  URGENT
+  EMERGENCY
+}
+
+enum AIStatus {
+  SUCCESS
+  FAILED
+  FALLBACK
+}
+
+enum NotificationStatus {
+  PENDING
+  SENT
+  FAILED
+}
+
+model User {
+  id           String            @id @default(uuid())
+  email        String            @unique
+  passwordHash String
+  role         Role              @default(PATIENT)
+  name         String
+  phone        String?
+  isActive     Boolean           @default(true)
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+
+  // Relations
+  doctorProfile    DoctorProfile?
+  patientBookings  Appointment[]        @relation("PatientAppointments")
+  holdsCreated     SlotHold[]           @relation("PatientHolds")
+  medicationAlerts MedicationAlert[]
+}
+
+model DoctorProfile {
+  userId              String         @id
+  specialization      String
+  bio                 String
+  consultationFee     Float          @default(50.0)
+  slotDurationMinutes Int            @default(30)
+  experienceYears     Int            @default(5)
+  rating              Float          @default(4.9)
+  workingHours        Json           // Array of { weekday: number, startTime: string, endTime: string }
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
+
+  // Relations
+  user                User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  leaves              DoctorLeave[]
+  doctorBookings      Appointment[]  @relation("DoctorAppointments")
+  slotHolds           SlotHold[]     @relation("DoctorHolds")
+  leaveAudits         LeaveResolutionAudit[]
+}
+
+model DoctorLeave {
+  id        String        @id @default(uuid())
+  doctorId  String
+  date      DateTime
+  reason    String?
+  createdAt DateTime      @default(now())
+
+  // Relations
+  doctor    DoctorProfile @relation(fields: [doctorId], references: [userId], onDelete: Cascade)
+
+  @@index([doctorId])
+  @@index([date])
+}
+
+model Appointment {
+  id               String            @id @default(uuid())
+  patientId        String
+  doctorId         String
+  slotStart        DateTime
+  slotEnd          DateTime
+  status           AppointmentStatus @default(HELD)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+
+  // Relations
+  patient          User              @relation("PatientAppointments", fields: [patientId], references: [id], onDelete: Cascade)
+  doctor           DoctorProfile     @relation("DoctorAppointments", fields: [doctorId], references: [userId], onDelete: Cascade)
+  symptomIntake    SymptomIntake?
+  triageAssessment TriageAssessment?
+  clinicalRecord   ClinicalRecord?
+  patientSummary   PatientSummary?
+  medicationAlerts MedicationAlert[]
+
+  @@index([patientId])
+  @@index([doctorId])
+  @@index([slotStart])
+  @@index([status])
+}
+
+model SlotHold {
+  id        String        @id @default(uuid())
+  doctorId  String
+  patientId String
+  slotStart DateTime
+  slotEnd   DateTime
+  expiresAt DateTime
+  createdAt DateTime      @default(now())
+
+  // Relations
+  doctor    DoctorProfile @relation("DoctorHolds", fields: [doctorId], references: [userId], onDelete: Cascade)
+  patient   User          @relation("PatientHolds", fields: [patientId], references: [id], onDelete: Cascade)
+
+  @@index([expiresAt])
+  @@index([doctorId, slotStart])
+}
+
+model SymptomIntake {
+  appointmentId       String      @id
+  symptomsDescription String
+  submittedAt         DateTime    @default(now())
+
+  // Relations
+  appointment         Appointment @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+}
+
+model TriageAssessment {
+  appointmentId            String       @id
+  urgencyLevel             UrgencyLevel @default(ROUTINE)
+  primaryConcern           String
+  suggestedDoctorQuestions Json         // Array of strings
+  rawAIOutput              String?
+  status                   AIStatus     @default(SUCCESS)
+  analyzedAt               DateTime     @default(now())
+
+  // Relations
+  appointment              Appointment  @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+}
+
+model ClinicalRecord {
+  appointmentId    String      @id
+  diagnosis        String
+  clinicalNotes    String
+  prescriptionsJson Json       // Array of { medicationName, dosage, frequency, durationDays, instructions }
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+
+  // Relations
+  appointment      Appointment @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+}
+
+model PatientSummary {
+  appointmentId                 String      @id
+  careInstructions              String
+  medicationScheduleJson        Json        // Array of structured schedule items
+  followUpRecommendationsJson   Json        // Array of string bullet points
+  generatedAt                   DateTime    @default(now())
+
+  // Relations
+  appointment                   Appointment @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+}
+
+model MedicationAlert {
+  id            String             @id @default(uuid())
+  appointmentId String
+  patientId     String
+  medicationName String
+  scheduledTime DateTime
+  isSent        Boolean            @default(false)
+  sentAt        DateTime?
+  createdAt     DateTime           @default(now())
+
+  // Relations
+  appointment   Appointment        @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+  patient       User               @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  @@index([patientId])
+  @@index([scheduledTime])
+  @@index([isSent])
+}
+
+model LeaveResolutionAudit {
+  id                         String        @id @default(uuid())
+  doctorId                   String
+  leaveDate                  DateTime
+  cancelledAppointmentsCount Int           @default(0)
+  affectedAppointmentsJson   Json          // Detailed metadata of cancelled bookings
+  loggedAt                   DateTime      @default(now())
+
+  // Relations
+  doctor                     DoctorProfile @relation(fields: [doctorId], references: [userId], onDelete: Cascade)
+
+  @@index([doctorId])
+}
+
+model SystemAuditLog {
+  id          String   @id @default(uuid())
+  action      String
+  performedBy String?
+  detailsJson Json?
+  timestamp   DateTime @default(now())
+
+  @@index([action])
+  @@index([timestamp])
+}

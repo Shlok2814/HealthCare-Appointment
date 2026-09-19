@@ -1,0 +1,300 @@
+import { prisma } from '../config/database';
+import { WorkingShift, AvailableSlot, AppointmentStatus } from '@pulsepoint/shared';
+
+export class DoctorService {
+  static async getAllDoctors(query?: { specialty?: string; search?: string }) {
+    const where: any = {
+      user: { isActive: true }
+    };
+
+    if (query?.specialty) {
+      where.specialization = {
+        equals: query.specialty,
+        mode: 'insensitive'
+      };
+    }
+
+    if (query?.search) {
+      where.OR = [
+        { user: { name: { contains: query.search, mode: 'insensitive' } } },
+        { specialization: { contains: query.search, mode: 'insensitive' } },
+        { bio: { contains: query.search, mode: 'insensitive' } }
+      ];
+    }
+
+    const doctors = await prisma.doctorProfile.findMany({
+      where,
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            phone: true
+          }
+        }
+      }
+    });
+
+    return doctors.map(doc => ({
+      id: doc.userId,
+      name: doc.user.name,
+      email: doc.user.email,
+      phone: doc.user.phone,
+      specialization: doc.specialization,
+      bio: doc.bio,
+      consultationFee: doc.consultationFee,
+      slotDurationMinutes: doc.slotDurationMinutes,
+      experienceYears: doc.experienceYears,
+      rating: doc.rating,
+      workingHours: doc.workingHours as unknown as WorkingShift[]
+    }));
+  }
+
+  static async getDoctorById(doctorId: string) {
+    const doc = await prisma.doctorProfile.findUnique({
+      where: { userId: doctorId },
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            phone: true
+          }
+        },
+        leaves: {
+          orderBy: { date: 'asc' }
+        }
+      }
+    });
+
+    if (!doc) {
+      const error: any = new Error('Doctor not found.');
+      error.statusCode = 404;
+      throw error;
+    }
+
+    return {
+      id: doc.userId,
+      name: doc.user.name,
+      email: doc.user.email,
+      phone: doc.user.phone,
+      specialization: doc.specialization,
+      bio: doc.bio,
+      consultationFee: doc.consultationFee,
+      slotDurationMinutes: doc.slotDurationMinutes,
+      experienceYears: doc.experienceYears,
+      rating: doc.rating,
+      workingHours: doc.workingHours as unknown as WorkingShift[],
+      leaves: doc.leaves.map(l => ({
+        id: l.id,
+        date: l.date.toISOString().split('T')[0],
+        reason: l.reason
+      }))
+    };
+  }
+
+  static async getAvailableSlots(doctorId: string, targetDateStr: string, currentPatientId?: string): Promise<AvailableSlot[]> {
+    const doctor = await prisma.doctorProfile.findUnique({
+      where: { userId: doctorId }
+    });
+
+    if (!doctor) {
+      const error: any = new Error('Doctor profile not found');
+      error.statusCode = 404;
+      throw error;
+    }
+
+    const targetDate = new Date(`${targetDateStr}T00:00:00.000Z`);
+    const dayStart = new Date(`${targetDateStr}T00:00:00.000Z`);
+    const dayEnd = new Date(`${targetDateStr}T23:59:59.999Z`);
+
+    // Check if doctor is on leave
+    const leave = await prisma.doctorLeave.findFirst({
+      where: {
+        doctorId,
+        date: {
+          gte: dayStart,
+          lte: dayEnd
+        }
+      }
+    });
+
+    if (leave) {
+      return []; // No slots available when doctor is on leave
+    }
+
+    const weekday = targetDate.getUTCDay();
+    const workingHours = (doctor.workingHours as unknown as WorkingShift[]) || [];
+    const shift = workingHours.find(s => s.weekday === weekday);
+
+    if (!shift) {
+      return []; // Doctor does not practice on this day
+    }
+
+    // Generate potential slots
+    const slots: AvailableSlot[] = [];
+    const [startH, startM] = shift.startTime.split(':').map(Number);
+    const [endH, endM] = shift.endTime.split(':').map(Number);
+
+    const shiftStart = new Date(targetDate);
+    shiftStart.setUTCHours(startH, startM, 0, 0);
+
+    const shiftEnd = new Date(targetDate);
+    shiftEnd.setUTCHours(endH, endM, 0, 0);
+
+    const slotDurationMs = doctor.slotDurationMinutes * 60 * 1000;
+
+    // Fetch existing confirmed bookings and active holds
+    const now = new Date();
+    const [existingAppointments, activeHolds] = await Promise.all([
+      prisma.appointment.findMany({
+        where: {
+          doctorId,
+          slotStart: { gte: dayStart, lte: dayEnd },
+          status: { in: [AppointmentStatus.CONFIRMED, AppointmentStatus.HELD] }
+        }
+      }),
+      prisma.slotHold.findMany({
+        where: {
+          doctorId,
+          slotStart: { gte: dayStart, lte: dayEnd },
+          expiresAt: { gt: now }
+        }
+      })
+    ]);
+
+    let current = new Date(shiftStart);
+    while (current.getTime() + slotDurationMs <= shiftEnd.getTime()) {
+      const slotStartTime = new Date(current);
+      const slotEndTime = new Date(current.getTime() + slotDurationMs);
+
+      const isBooked = existingAppointments.some(appt => 
+        appt.slotStart.getTime() === slotStartTime.getTime()
+      );
+
+      const holdMatch = activeHolds.find(hold =>
+        hold.slotStart.getTime() === slotStartTime.getTime()
+      );
+
+      const isHeld = !!holdMatch;
+      const isAvailable = !isBooked && !isHeld;
+
+      slots.push({
+        slotStart: slotStartTime.toISOString(),
+        slotEnd: slotEndTime.toISOString(),
+        isAvailable,
+        isHeld,
+        heldByCurrentUser: holdMatch ? holdMatch.patientId === currentPatientId : false
+      });
+
+      current = new Date(current.getTime() + slotDurationMs);
+    }
+
+    return slots;
+  }
+
+  static async registerLeave(doctorId: string, dateStr: string, reason?: string) {
+    const leaveDate = new Date(`${dateStr}T00:00:00.000Z`);
+    const dayStart = new Date(`${dateStr}T00:00:00.000Z`);
+    const dayEnd = new Date(`${dateStr}T23:59:59.999Z`);
+
+    // Register leave in transaction, sweep conflicting appointments, and log resolution
+    return await prisma.$transaction(async (tx) => {
+      // 1. Create or ensure leave record
+      const existingLeave = await tx.doctorLeave.findFirst({
+        where: {
+          doctorId,
+          date: { gte: dayStart, lte: dayEnd }
+        }
+      });
+
+      let leave = existingLeave;
+      if (!existingLeave) {
+        leave = await tx.doctorLeave.create({
+          data: {
+            doctorId,
+            date: leaveDate,
+            reason: reason || 'Scheduled Doctor Leave'
+          }
+        });
+      }
+
+      // 2. Find all conflicting confirmed/held appointments on this day
+      const conflictingAppointments = await tx.appointment.findMany({
+        where: {
+          doctorId,
+          slotStart: { gte: dayStart, lte: dayEnd },
+          status: { in: [AppointmentStatus.CONFIRMED, AppointmentStatus.HELD] }
+        },
+        include: {
+          patient: true
+        }
+      });
+
+      // 3. Auto-cancel conflicting appointments
+      if (conflictingAppointments.length > 0) {
+        await tx.appointment.updateMany({
+          where: {
+            id: { in: conflictingAppointments.map(a => a.id) }
+          },
+          data: {
+            status: AppointmentStatus.CANCELLED
+          }
+        });
+
+        // 4. Log Leave Resolution Audit
+        await tx.leaveResolutionAudit.create({
+          data: {
+            doctorId,
+            leaveDate,
+            cancelledAppointmentsCount: conflictingAppointments.length,
+            affectedAppointmentsJson: conflictingAppointments.map(a => ({
+              appointmentId: a.id,
+              patientId: a.patientId,
+              patientName: a.patient.name,
+              patientEmail: a.patient.email,
+              slotStart: a.slotStart.toISOString(),
+              reason: 'Doctor scheduled sudden leave'
+            }))
+          }
+        });
+
+        // 5. Release any active holds for that day
+        await tx.slotHold.deleteMany({
+          where: {
+            doctorId,
+            slotStart: { gte: dayStart, lte: dayEnd }
+          }
+        });
+      }
+
+      return {
+        leave,
+        cancelledCount: conflictingAppointments.length,
+        affectedPatients: conflictingAppointments.map(a => ({
+          name: a.patient.name,
+          email: a.patient.email,
+          slotStart: a.slotStart
+        }))
+      };
+    });
+  }
+
+  static async getLeaveAudits(doctorId?: string) {
+    return await prisma.leaveResolutionAudit.findMany({
+      where: doctorId ? { doctorId } : {},
+      include: {
+        doctor: {
+          include: {
+            user: {
+              select: { name: true, email: true }
+            }
+          }
+        }
+      },
+      orderBy: { loggedAt: 'desc' }
+    });
+  }
+}

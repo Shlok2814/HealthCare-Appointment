@@ -188,11 +188,12 @@ export const DoctorCard: React.FC<DoctorCardProps> = ({ doctor, onSelect, isSele
 
           {/* Career & Achievements Button */}
           <button
+            type="button"
             onClick={(e) => {
               e.stopPropagation();
               setIsProfileModalOpen(true);
             }}
-            className="pulse-btn"
+            className="pulse-btn pulse-chip-hover"
             style={{
               width: '100%',
               padding: '8px 12px',
@@ -237,7 +238,7 @@ export const DoctorCard: React.FC<DoctorCardProps> = ({ doctor, onSelect, isSele
           <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
             <button
               type="button"
-              className="pulse-btn"
+              className="pulse-btn pulse-chip-hover"
               style={{
                 padding: '8px 13px',
                 fontSize: '0.8rem',
@@ -260,7 +261,8 @@ export const DoctorCard: React.FC<DoctorCardProps> = ({ doctor, onSelect, isSele
             </button>
 
             <button
-              className={`pulse-btn ${isSelected ? 'pulse-btn-primary' : 'pulse-btn-secondary'}`}
+              type="button"
+              className={`pulse-btn ${isSelected ? 'pulse-btn-primary' : 'pulse-btn-secondary pulse-chip-hover'}`}
               style={{ padding: '8px 16px', fontSize: '0.85rem', fontWeight: 800, borderRadius: '10px' }}
               onClick={(e) => {
                 e.stopPropagation();
@@ -268,7 +270,7 @@ export const DoctorCard: React.FC<DoctorCardProps> = ({ doctor, onSelect, isSele
               }}
             >
               <Calendar size={15} />
-              {isSelected ? 'Selected' : 'Book Visit'}
+              {isSelected ? '✓ Selected' : 'Book Visit'}
             </button>
           </div>
         </div>

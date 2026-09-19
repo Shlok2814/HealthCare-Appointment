@@ -11,7 +11,7 @@ import {
   HeartPulse, Search, Shield, Zap, Sparkles, CheckCircle2, 
   Calendar, Stethoscope, ArrowRight, Activity, SlidersHorizontal, 
   Tag, Video, Clock, Star, PhoneCall, MessageSquare, Pill, 
-  Lock, Award, ShieldCheck, HelpCircle, FileText
+  Lock, Award, ShieldCheck, HelpCircle, FileText, X, ArrowUpDown
 } from 'lucide-react';
 
 interface LandingPageProps {
@@ -23,7 +23,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
   const [doctors, setDoctors] = useState<DoctorDTO[]>([]);
   const [selectedSpecialty, setSelectedSpecialty] = useState<string>('All Specialties');
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [sortBy, setSortBy] = useState<'rating' | 'fee_asc' | 'experience'>('rating');
+  const [sortBy, setSortBy] = useState<'rating' | 'fee_asc' | 'experience' | 'recommended' | 'name_asc'>('rating');
   const [selectedDoctor, setSelectedDoctor] = useState<DoctorDTO | null>(null);
   const [selectedSlot, setSelectedSlot] = useState<AvailableSlot | null>(null);
   const [isTriageModalOpen, setIsTriageModalOpen] = useState<boolean>(false);
@@ -261,7 +261,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
       {/* Feature Highlights Grid */}
       <section style={{ maxWidth: '1280px', margin: '-32px auto 40px', padding: '0 24px', position: 'relative', zIndex: 10 }}>
         <div className="pulse-glass" style={{ borderRadius: '22px', padding: '24px 32px', boxShadow: '0 10px 30px -5px rgba(15, 23, 42, 0.1)', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <div className="pulse-card-interactive" style={{ display: 'flex', alignItems: 'center', gap: '14px', padding: '10px 14px', borderRadius: '16px' }}>
             <div style={{ background: '#EFF6FF', color: '#0284C7', padding: '14px', borderRadius: '14px' }}>
               <Lock size={24} />
             </div>
@@ -271,7 +271,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
             </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <div className="pulse-card-interactive" style={{ display: 'flex', alignItems: 'center', gap: '14px', padding: '10px 14px', borderRadius: '16px' }}>
             <div style={{ background: '#F0FDFA', color: '#0D9488', padding: '14px', borderRadius: '14px' }}>
               <Sparkles size={24} />
             </div>
@@ -281,7 +281,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
             </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <div className="pulse-card-interactive" style={{ display: 'flex', alignItems: 'center', gap: '14px', padding: '10px 14px', borderRadius: '16px' }}>
             <div style={{ background: '#EDE9FE', color: '#7C3AED', padding: '14px', borderRadius: '14px' }}>
               <Video size={24} />
             </div>
@@ -291,7 +291,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
             </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <div className="pulse-card-interactive" style={{ display: 'flex', alignItems: 'center', gap: '14px', padding: '10px 14px', borderRadius: '16px' }}>
             <div style={{ background: '#ECFDF5', color: '#059669', padding: '14px', borderRadius: '14px' }}>
               <Pill size={24} />
             </div>
@@ -348,42 +348,61 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
                 placeholder="Search physician, domain, or symptom..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
+                className="pulse-input"
                 style={{
                   padding: '11px 16px 11px 40px',
                   borderRadius: '12px',
-                  border: '1.5px solid var(--border-strong)',
                   fontSize: '0.875rem',
-                  fontFamily: 'var(--font-family)',
                   minWidth: '290px',
-                  background: '#FFFFFF',
-                  outline: 'none',
                   boxShadow: '0 1px 3px rgba(0,0,0,0.03)'
                 }}
               />
-              <Search size={17} color="#0284C7" style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)' }} />
+              <Search size={18} color="var(--text-light)" style={{ position: 'absolute', left: '13px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
+              {searchTerm && (
+                <button
+                  type="button"
+                  onClick={() => setSearchTerm('')}
+                  style={{
+                    position: 'absolute',
+                    right: '12px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    background: '#E2E8F0',
+                    border: 'none',
+                    borderRadius: '50%',
+                    width: '20px',
+                    height: '20px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    cursor: 'pointer',
+                    color: '#64748B'
+                  }}
+                >
+                  <X size={12} />
+                </button>
+              )}
             </div>
 
-            {/* Sort Dropdown */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <SlidersHorizontal size={16} color="var(--text-muted)" />
+            {/* Sort Select */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <ArrowUpDown size={16} color="var(--text-muted)" />
               <select
                 value={sortBy}
-                onChange={(e: any) => setSortBy(e.target.value)}
+                onChange={(e) => setSortBy(e.target.value as any)}
+                className="pulse-input"
                 style={{
-                  padding: '11px 14px',
+                  padding: '10px 14px',
                   borderRadius: '12px',
-                  border: '1.5px solid var(--border-strong)',
-                  fontSize: '0.875rem',
-                  background: '#FFFFFF',
-                  color: 'var(--text-main)',
+                  fontSize: '0.85rem',
                   fontWeight: 700,
                   cursor: 'pointer',
-                  outline: 'none'
+                  width: 'auto'
                 }}
               >
-                <option value="rating">Top Rated (⭐ 4.9+)</option>
+                <option value="recommended">Highest Rated & Experience</option>
                 <option value="fee_asc">Lowest Consultation Fee (₹)</option>
-                <option value="experience">Most Experienced (Yrs)</option>
+                <option value="name_asc">Doctor Name (A to Z)</option>
               </select>
             </div>
           </div>
@@ -397,10 +416,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
           {popularSymptoms.map((sym, idx) => (
             <button
               key={idx}
+              type="button"
               onClick={() => {
                 setSelectedSpecialty(sym.specialty);
                 setSearchTerm('');
               }}
+              className="pulse-chip-hover"
               style={{
                 background: selectedSpecialty === sym.specialty ? '#0284C7' : '#FFFFFF',
                 border: selectedSpecialty === sym.specialty ? '1px solid #0284C7' : '1px solid #CBD5E1',
@@ -410,7 +431,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
                 fontWeight: 700,
                 color: selectedSpecialty === sym.specialty ? '#FFFFFF' : '#334155',
                 cursor: 'pointer',
-                transition: 'all 0.15s ease',
                 boxShadow: '0 1px 2px rgba(0,0,0,0.04)'
               }}
             >
@@ -426,8 +446,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
             return (
               <button
                 key={spec.name}
+                type="button"
                 onClick={() => setSelectedSpecialty(spec.name)}
-                className="pulse-btn"
+                className={`pulse-btn ${isActive ? '' : 'pulse-chip-hover'}`}
                 style={{
                   fontSize: '0.85rem',
                   fontWeight: 800,

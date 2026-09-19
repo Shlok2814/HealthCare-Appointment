@@ -100,13 +100,15 @@ export const DoctorProfileModal: React.FC<DoctorProfileModalProps> = ({
           position: 'relative'
         }}>
           <button
+            type="button"
             onClick={onClose}
+            className="pulse-icon-btn close-btn"
             style={{
               position: 'absolute',
               top: '20px',
               right: '20px',
               background: 'rgba(255, 255, 255, 0.15)',
-              border: 'none',
+              border: '1px solid rgba(255, 255, 255, 0.25)',
               borderRadius: '50%',
               width: '36px',
               height: '36px',
@@ -407,14 +409,14 @@ export const DoctorProfileModal: React.FC<DoctorProfileModalProps> = ({
           </div>
 
           <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-            <button onClick={onClose} className="pulse-btn pulse-btn-secondary" style={{ padding: '10px 18px' }}>
+            <button type="button" onClick={onClose} className="pulse-btn pulse-btn-secondary" style={{ padding: '10px 18px' }}>
               Close
             </button>
             {onOpenMessage && (
               <button 
                 type="button"
                 onClick={onOpenMessage} 
-                className="pulse-btn" 
+                className="pulse-btn pulse-chip-hover" 
                 style={{ 
                   padding: '10px 20px', 
                   fontWeight: 700,
@@ -431,6 +433,7 @@ export const DoctorProfileModal: React.FC<DoctorProfileModalProps> = ({
               </button>
             )}
             <button
+              type="button"
               onClick={() => {
                 onBook(doctor);
                 onClose();

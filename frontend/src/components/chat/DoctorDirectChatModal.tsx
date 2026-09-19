@@ -181,6 +181,7 @@ export const DoctorDirectChatModal: React.FC<DoctorDirectChatModalProps> = ({
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <button 
+              type="button"
               onClick={() => {
                 onBookAppointment(doctor);
                 onClose();
@@ -191,8 +192,10 @@ export const DoctorDirectChatModal: React.FC<DoctorDirectChatModalProps> = ({
               <Calendar size={14} /> Book Slot
             </button>
             <button 
+              type="button"
               onClick={onClose}
-              style={{ background: 'rgba(255,255,255,0.1)', border: 'none', borderRadius: '50%', width: '32px', height: '32px', color: '#FFF', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
+              className="pulse-icon-btn close-btn"
+              style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '50%', width: '32px', height: '32px', color: '#FFF', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
             >
               <X size={18} />
             </button>
@@ -256,11 +259,12 @@ export const DoctorDirectChatModal: React.FC<DoctorDirectChatModalProps> = ({
               key={idx}
               type="button"
               onClick={() => setInputText(q)}
+              className="pulse-chip-hover"
               style={{
                 background: '#FFFFFF',
                 border: '1px solid #CBD5E1',
                 borderRadius: '16px',
-                padding: '4px 12px',
+                padding: '5px 12px',
                 fontSize: '0.75rem',
                 color: '#334155',
                 fontWeight: 600,
@@ -290,14 +294,12 @@ export const DoctorDirectChatModal: React.FC<DoctorDirectChatModalProps> = ({
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             placeholder={`Ask ${doctor.name} a question about symptoms, medication, or visits...`}
+            className="pulse-input"
             style={{
               flex: 1,
               padding: '12px 16px',
               borderRadius: '12px',
-              border: '1.5px solid #CBD5E1',
-              fontSize: '0.9rem',
-              fontFamily: 'inherit',
-              outline: 'none'
+              fontSize: '0.9rem'
             }}
           />
 

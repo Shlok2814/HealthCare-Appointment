@@ -98,16 +98,31 @@ h1, h2, h3, h4, h5, h6 {
   position: relative;
 }
 
+.pulse-card-hover {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+}
+
 .pulse-card-hover:hover {
   transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 16px 32px -6px rgba(2, 132, 199, 0.16), 0 4px 12px -2px rgba(15, 23, 42, 0.06);
+  border-color: #7DD3FC;
+}
+
+.pulse-card-interactive {
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pulse-card-interactive:hover {
+  transform: translateY(-3px) scale(1.008);
+  box-shadow: 0 14px 28px -6px rgba(15, 23, 42, 0.12);
   border-color: #BAE6FD;
 }
 
 .pulse-card.selected {
   border-color: var(--ocean-500) !important;
   background: #F0F9FF !important;
-  box-shadow: 0 0 0 2px var(--ocean-500), var(--shadow-md) !important;
+  box-shadow: 0 0 0 2px var(--ocean-500), 0 12px 28px -6px rgba(2, 132, 199, 0.25) !important;
 }
 
 .pulse-glass {
@@ -115,13 +130,19 @@ h1, h2, h3, h4, h5, h6 {
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(226, 232, 240, 0.85);
+  transition: all 0.25s ease;
+}
+
+.pulse-glass:hover {
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 12px 30px -4px rgba(2, 132, 199, 0.12);
 }
 
 .pulse-hero-glow {
   background: radial-gradient(circle at 50% 0%, rgba(14, 165, 233, 0.12) 0%, rgba(20, 184, 166, 0.06) 40%, transparent 70%);
 }
 
-/* Buttons */
+/* Buttons with Rich Hover States */
 .pulse-btn {
   display: inline-flex;
   align-items: center;
@@ -134,9 +155,19 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: var(--radius-md);
   border: none;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
   text-decoration: none;
   line-height: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+.pulse-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.pulse-btn:active:not(:disabled) {
+  transform: translateY(0.5px) scale(0.98);
 }
 
 .pulse-btn:disabled {
@@ -148,12 +179,12 @@ h1, h2, h3, h4, h5, h6 {
 .pulse-btn-primary {
   background: linear-gradient(135deg, #0284C7 0%, #0D9488 100%);
   color: #FFFFFF;
-  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.3);
 }
 
 .pulse-btn-primary:hover:not(:disabled) {
   background: linear-gradient(135deg, #0369A1 0%, #0F766E 100%);
-  box-shadow: 0 6px 20px rgba(2, 132, 199, 0.4);
+  box-shadow: 0 8px 24px rgba(2, 132, 199, 0.45);
   transform: translateY(-2px);
 }
 
@@ -164,9 +195,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .pulse-btn-secondary:hover:not(:disabled) {
-  background: var(--bg-subtle);
-  border-color: var(--text-muted);
-  transform: translateY(-1px);
+  background: #F8FAFC;
+  border-color: #0284C7;
+  color: #0284C7;
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.12);
+  transform: translateY(-2px);
 }
 
 .pulse-btn-danger {
@@ -177,6 +210,75 @@ h1, h2, h3, h4, h5, h6 {
 
 .pulse-btn-danger:hover:not(:disabled) {
   background: #FEE2E2;
+  border-color: #F87171;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Icon Buttons with Hover Micro-animations */
+.pulse-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border-radius: 10px;
+  border: 1px solid var(--border-light);
+  background: #FFFFFF;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pulse-icon-btn:hover:not(:disabled) {
+  background: #F0F9FF;
+  color: #0284C7;
+  border-color: #BAE6FD;
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.15);
+}
+
+.pulse-icon-btn.close-btn:hover {
+  background: #FEF2F2;
+  color: #DC2626;
+  border-color: #FECACA;
+  transform: rotate(90deg);
+}
+
+/* Interactive Chips & Pills */
+.pulse-chip-hover {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+}
+
+.pulse-chip-hover:hover {
+  transform: translateY(-2px);
+  border-color: #0284C7 !important;
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.18);
+}
+
+/* Inputs with Interactive Focus & Hover */
+.pulse-input {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1.5px solid var(--border-strong);
+  background: #FFFFFF;
+  color: var(--text-main);
+  font-family: var(--font-family);
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.pulse-input:hover {
+  border-color: #94A3B8;
+  background: #FFFFFF;
+}
+
+.pulse-input:focus {
+  border-color: #0284C7;
+  box-shadow: 0 0 0 3.5px rgba(2, 132, 199, 0.15);
+  background: #FFFFFF;
 }
 
 /* Badges */
@@ -190,6 +292,11 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: var(--radius-full);
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  transition: all 0.2s ease;
+}
+
+.pulse-badge:hover {
+  transform: scale(1.04);
 }
 
 .pulse-badge-success {

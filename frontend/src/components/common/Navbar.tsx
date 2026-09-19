@@ -85,13 +85,14 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate, onOpenE
         </div>
 
         {/* Navigation Items */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <button
+            type="button"
             onClick={() => onNavigate('landing')}
-            className={`pulse-btn ${currentView === 'landing' ? 'pulse-btn-secondary' : ''}`}
+            className={`pulse-btn ${currentView === 'landing' ? 'pulse-btn-secondary' : 'pulse-chip-hover'}`}
             style={{ 
               background: currentView === 'landing' ? 'var(--primary-50)' : 'transparent', 
-              border: currentView === 'landing' ? '1px solid var(--primary-200)' : 'none', 
+              border: currentView === 'landing' ? '1px solid var(--primary-200)' : '1px solid transparent', 
               color: currentView === 'landing' ? 'var(--primary-700)' : 'var(--text-main)',
               padding: '8px 16px',
               fontSize: '0.875rem'
@@ -102,11 +103,12 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate, onOpenE
 
           {user && user.role === UserRole.PATIENT && (
             <button
+              type="button"
               onClick={() => onNavigate('patient')}
-              className={`pulse-btn ${currentView === 'patient' ? 'pulse-btn-secondary' : ''}`}
+              className={`pulse-btn ${currentView === 'patient' ? 'pulse-btn-secondary' : 'pulse-chip-hover'}`}
               style={{ 
                 background: currentView === 'patient' ? '#EFF6FF' : 'transparent', 
-                border: currentView === 'patient' ? '1px solid #BAE6FD' : 'none', 
+                border: currentView === 'patient' ? '1px solid #BAE6FD' : '1px solid transparent', 
                 color: currentView === 'patient' ? '#0369A1' : 'var(--text-main)',
                 padding: '8px 16px',
                 fontSize: '0.875rem'
@@ -118,11 +120,12 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate, onOpenE
 
           {user && user.role === UserRole.DOCTOR && (
             <button
+              type="button"
               onClick={() => onNavigate('doctor')}
-              className={`pulse-btn ${currentView === 'doctor' ? 'pulse-btn-secondary' : ''}`}
+              className={`pulse-btn ${currentView === 'doctor' ? 'pulse-btn-secondary' : 'pulse-chip-hover'}`}
               style={{ 
                 background: currentView === 'doctor' ? 'var(--primary-50)' : 'transparent', 
-                border: currentView === 'doctor' ? '1px solid var(--primary-200)' : 'none', 
+                border: currentView === 'doctor' ? '1px solid var(--primary-200)' : '1px solid transparent', 
                 color: currentView === 'doctor' ? 'var(--primary-700)' : 'var(--text-main)',
                 padding: '8px 16px',
                 fontSize: '0.875rem'
@@ -134,11 +137,12 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate, onOpenE
 
           {user && user.role === UserRole.ADMIN && (
             <button
+              type="button"
               onClick={() => onNavigate('admin')}
-              className={`pulse-btn ${currentView === 'admin' ? 'pulse-btn-secondary' : ''}`}
+              className={`pulse-btn ${currentView === 'admin' ? 'pulse-btn-secondary' : 'pulse-chip-hover'}`}
               style={{ 
                 background: currentView === 'admin' ? '#FAF5FF' : 'transparent', 
-                border: currentView === 'admin' ? '1px solid #E9D5FF' : 'none', 
+                border: currentView === 'admin' ? '1px solid #E9D5FF' : '1px solid transparent', 
                 color: currentView === 'admin' ? '#7E22CE' : 'var(--text-main)',
                 padding: '8px 16px',
                 fontSize: '0.875rem'
@@ -151,8 +155,9 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate, onOpenE
           {/* 24/7 Urgent Care SOS Button */}
           {onOpenEmergency && (
             <button
+              type="button"
               onClick={onOpenEmergency}
-              className="pulse-btn"
+              className="pulse-btn pulse-chip-hover"
               style={{ 
                 background: 'linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%)', 
                 color: '#DC2626', 
@@ -186,25 +191,32 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate, onOpenE
                 border: '1px solid #E2E8F0'
               }}>
                 <button
+                  type="button"
                   onClick={() => loginAsDemo('PATIENT')}
-                  style={{ fontSize: '0.75rem', fontWeight: 700, padding: '5px 9px', border: 'none', background: 'transparent', cursor: 'pointer', color: '#475569', borderRadius: '6px' }}
+                  className="pulse-chip-hover"
+                  style={{ fontSize: '0.75rem', fontWeight: 700, padding: '5px 9px', border: 'none', background: 'transparent', color: '#475569', borderRadius: '6px' }}
                 >
                   Patient
                 </button>
                 <button
+                  type="button"
                   onClick={() => loginAsDemo('DOCTOR')}
-                  style={{ fontSize: '0.75rem', fontWeight: 700, padding: '5px 9px', border: 'none', background: 'transparent', cursor: 'pointer', color: '#475569', borderRadius: '6px' }}
+                  className="pulse-chip-hover"
+                  style={{ fontSize: '0.75rem', fontWeight: 700, padding: '5px 9px', border: 'none', background: 'transparent', color: '#475569', borderRadius: '6px' }}
                 >
                   Doctor
                 </button>
                 <button
+                  type="button"
                   onClick={() => loginAsDemo('ADMIN')}
-                  style={{ fontSize: '0.75rem', fontWeight: 700, padding: '5px 9px', border: 'none', background: 'transparent', cursor: 'pointer', color: '#475569', borderRadius: '6px' }}
+                  className="pulse-chip-hover"
+                  style={{ fontSize: '0.75rem', fontWeight: 700, padding: '5px 9px', border: 'none', background: 'transparent', color: '#475569', borderRadius: '6px' }}
                 >
                   Admin
                 </button>
               </div>
               <button 
+                type="button"
                 onClick={() => onNavigate('login')} 
                 className="pulse-btn pulse-btn-primary" 
                 style={{ padding: '8px 18px', fontSize: '0.85rem' }}
@@ -221,6 +233,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate, onOpenE
                 </div>
               </div>
               <button
+                type="button"
                 onClick={logout}
                 className="pulse-btn pulse-btn-secondary"
                 title="Log out"

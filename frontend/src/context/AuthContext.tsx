@@ -15,10 +15,10 @@ interface AuthContextType {
   user: User | null;
   token: string | null;
   isLoading: boolean;
-  login: (credentials: UserLoginInput) => Promise<void>;
-  register: (data: UserRegisterInput) => Promise<void>;
+  login: (credentials: UserLoginInput) => Promise<User>;
+  register: (data: UserRegisterInput) => Promise<User>;
   logout: () => void;
-  loginAsDemo: (role: 'ADMIN' | 'DOCTOR' | 'PATIENT') => Promise<void>;
+  loginAsDemo: (role: 'ADMIN' | 'DOCTOR' | 'PATIENT') => Promise<User>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -47,18 +47,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     initializeAuth();
   }, []);
 
-  const login = async (credentials: UserLoginInput) => {
+  const login = async (credentials: UserLoginInput): Promise<User> => {
     const response = await api.login(credentials);
     localStorage.setItem('pulsepoint_token', response.token);
     setToken(response.token);
     setUser(response.user);
+    return response.user;
   };
 
-  const register = async (data: UserRegisterInput) => {
+  const register = async (data: UserRegisterInput): Promise<User> => {
     const response = await api.register(data);
     localStorage.setItem('pulsepoint_token', response.token);
     setToken(response.token);
     setUser(response.user);
+    return response.user;
   };
 
   const logout = () => {
@@ -67,7 +69,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(null);
   };
 
-  const loginAsDemo = async (role: 'ADMIN' | 'DOCTOR' | 'PATIENT') => {
+  const loginAsDemo = async (role: 'ADMIN' | 'DOCTOR' | 'PATIENT'): Promise<User> => {
     let credentials: UserLoginInput;
     if (role === 'ADMIN') {
       credentials = { email: 'admin@pulsepoint.health', password: 'Admin@1234' };
@@ -76,7 +78,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } else {
       credentials = { email: 'alex.reynolds@gmail.com', password: 'Patient@1234' };
     }
-    await login(credentials);
+    return await login(credentials);
   };
 
   return (

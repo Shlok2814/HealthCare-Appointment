@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { UserRole } from '@pulsepoint/shared';
-import { HeartPulse, Lock, Mail, User, Shield, Stethoscope, ArrowRight, AlertCircle } from 'lucide-react';
+import { HeartPulse, Lock, Mail, User, Shield, Stethoscope, ArrowRight, AlertCircle, Sparkles, KeyRound } from 'lucide-react';
 
 interface AuthPageProps {
   onSuccessNavigate: (role: UserRole) => void;
@@ -24,8 +24,9 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccessNavigate }) => {
     setError(null);
 
     try {
+      let loggedInUser;
       if (isRegisterMode) {
-        await register({
+        loggedInUser = await register({
           name,
           email,
           password,
@@ -33,9 +34,9 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccessNavigate }) => {
           ...(role === UserRole.DOCTOR && { specialization })
         });
       } else {
-        await login({ email, password });
+        loggedInUser = await login({ email, password });
       }
-      onSuccessNavigate(role);
+      onSuccessNavigate(loggedInUser?.role || role);
     } catch (err: any) {
       setError(err.message || 'Authentication failed');
     } finally {
@@ -47,8 +48,8 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccessNavigate }) => {
     setIsLoading(true);
     setError(null);
     try {
-      await loginAsDemo(demoRole);
-      onSuccessNavigate(demoRole as UserRole);
+      const loggedInUser = await loginAsDemo(demoRole);
+      onSuccessNavigate(loggedInUser?.role || (demoRole as UserRole));
     } catch (err: any) {
       setError(err.message || 'Demo login failed');
     } finally {
@@ -56,11 +57,26 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccessNavigate }) => {
     }
   };
 
+  const handleFillCredentials = (fillRole: 'ADMIN' | 'DOCTOR' | 'PATIENT') => {
+    setIsRegisterMode(false);
+    setError(null);
+    if (fillRole === 'ADMIN') {
+      setEmail('admin@pulsepoint.health');
+      setPassword('Admin@1234');
+    } else if (fillRole === 'DOCTOR') {
+      setEmail('dr.sarah@pulsepoint.health');
+      setPassword('Doctor@1234');
+    } else {
+      setEmail('alex.reynolds@gmail.com');
+      setPassword('Patient@1234');
+    }
+  };
+
   return (
     <div style={{ minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px 24px' }}>
-      <div className="pulse-card" style={{ maxWidth: '480px', width: '100%', padding: '36px', boxShadow: 'var(--shadow-xl)' }}>
+      <div className="pulse-card" style={{ maxWidth: '500px', width: '100%', padding: '36px', boxShadow: 'var(--shadow-xl)' }}>
         {/* Brand header */}
-        <div style={{ textAlign: 'center', marginBottom: '28px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '24px' }}>
           <div style={{
             display: 'inline-flex',
             background: 'linear-gradient(135deg, var(--primary-600) 0%, var(--accent-600) 100%)',
@@ -72,52 +88,138 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccessNavigate }) => {
           }}>
             <HeartPulse size={28} />
           </div>
-          <h2 style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--text-main)' }}>
+          <h2 style={{ fontSize: '1.65rem', fontWeight: 800, color: 'var(--text-main)' }}>
             {isRegisterMode ? 'Create Your Account' : 'Welcome to PulsePoint'}
           </h2>
           <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginTop: '4px' }}>
-            {isRegisterMode ? 'Join our modern healthcare ecosystem' : 'Access your patient or doctor portal'}
+            {isRegisterMode ? 'Join our modern healthcare platform' : 'Sign in as Patient, Doctor, or Guest Administrator'}
           </p>
         </div>
 
-        {/* Quick Demo Switcher Tabs */}
-        <div style={{ background: 'var(--bg-subtle)', borderRadius: '12px', padding: '14px', marginBottom: '24px' }}>
-          <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '8px', textAlign: 'center' }}>
-            ⚡ Instant 1-Click Demo Profiles
+        {/* 1-Click Guest & Demo Login Profiles */}
+        <div style={{ 
+          background: 'linear-gradient(135deg, #F0FDFA 0%, #EEF2FF 100%)', 
+          borderRadius: '14px', 
+          padding: '16px', 
+          marginBottom: '24px',
+          border: '1.5px solid var(--primary-200)'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', fontSize: '0.8rem', fontWeight: 800, color: 'var(--primary-800)', textTransform: 'uppercase', marginBottom: '10px' }}>
+            <Sparkles size={15} /> Instant 1-Click Guest Profiles
           </div>
+
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px' }}>
-            <button
-              type="button"
-              onClick={() => handleDemoLogin('PATIENT')}
-              className="pulse-btn pulse-btn-secondary"
-              style={{ fontSize: '0.78rem', padding: '8px 4px' }}
-              disabled={isLoading}
-            >
-              <User size={13} /> Patient
-            </button>
-            <button
-              type="button"
-              onClick={() => handleDemoLogin('DOCTOR')}
-              className="pulse-btn pulse-btn-secondary"
-              style={{ fontSize: '0.78rem', padding: '8px 4px' }}
-              disabled={isLoading}
-            >
-              <Stethoscope size={13} /> Doctor
-            </button>
+            {/* Guest Admin */}
             <button
               type="button"
               onClick={() => handleDemoLogin('ADMIN')}
-              className="pulse-btn pulse-btn-secondary"
-              style={{ fontSize: '0.78rem', padding: '8px 4px' }}
+              className="pulse-btn"
+              style={{
+                background: '#FFFFFF',
+                color: '#4338CA',
+                border: '1.5px solid #C7D2FE',
+                fontSize: '0.8rem',
+                fontWeight: 700,
+                padding: '10px 6px',
+                borderRadius: '10px',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '4px',
+                boxShadow: 'var(--shadow-sm)'
+              }}
               disabled={isLoading}
+              title="Click to instantly log in as System Administrator"
             >
-              <Shield size={13} /> Admin
+              <Shield size={18} color="#4F46E5" />
+              <span>Guest Admin</span>
+            </button>
+
+            {/* Guest Doctor */}
+            <button
+              type="button"
+              onClick={() => handleDemoLogin('DOCTOR')}
+              className="pulse-btn"
+              style={{
+                background: '#FFFFFF',
+                color: '#0369A1',
+                border: '1.5px solid #BAE6FD',
+                fontSize: '0.8rem',
+                fontWeight: 700,
+                padding: '10px 6px',
+                borderRadius: '10px',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '4px',
+                boxShadow: 'var(--shadow-sm)'
+              }}
+              disabled={isLoading}
+              title="Click to instantly log in as Cardiologist Doctor"
+            >
+              <Stethoscope size={18} color="#0284C7" />
+              <span>Guest Doctor</span>
+            </button>
+
+            {/* Guest Patient */}
+            <button
+              type="button"
+              onClick={() => handleDemoLogin('PATIENT')}
+              className="pulse-btn"
+              style={{
+                background: '#FFFFFF',
+                color: '#0F766E',
+                border: '1.5px solid #99F6E4',
+                fontSize: '0.8rem',
+                fontWeight: 700,
+                padding: '10px 6px',
+                borderRadius: '10px',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '4px',
+                boxShadow: 'var(--shadow-sm)'
+              }}
+              disabled={isLoading}
+              title="Click to instantly log in as Patient"
+            >
+              <User size={18} color="#0D9488" />
+              <span>Guest Patient</span>
+            </button>
+          </div>
+
+          <div style={{ textAlign: 'center', marginTop: '10px' }}>
+            <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
+              Or autofill credentials:
+            </span>{' '}
+            <button 
+              type="button"
+              onClick={() => handleFillCredentials('ADMIN')}
+              style={{ background: 'none', border: 'none', color: '#4F46E5', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer', textDecoration: 'underline' }}
+            >
+              Admin
+            </button>{' '}
+            •{' '}
+            <button 
+              type="button"
+              onClick={() => handleFillCredentials('DOCTOR')}
+              style={{ background: 'none', border: 'none', color: '#0284C7', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer', textDecoration: 'underline' }}
+            >
+              Doctor
+            </button>{' '}
+            •{' '}
+            <button 
+              type="button"
+              onClick={() => handleFillCredentials('PATIENT')}
+              style={{ background: 'none', border: 'none', color: '#0D9488', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer', textDecoration: 'underline' }}
+            >
+              Patient
             </button>
           </div>
         </div>
 
-        {/* Auth Mode Toggle */}
-        <div style={{ display: 'flex', borderBottom: '2px solid var(--border-light)', marginBottom: '24px' }}>
+        {/* Auth Mode Switcher */}
+        <div style={{ display: 'flex', borderBottom: '2px solid var(--border-light)', marginBottom: '22px' }}>
           <button
             type="button"
             onClick={() => { setIsRegisterMode(false); setError(null); }}
@@ -237,51 +339,57 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccessNavigate }) => {
             <label style={{ display: 'block', fontSize: '0.825rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '4px' }}>
               Email Address:
             </label>
-            <input
-              type="email"
-              required
-              placeholder="name@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              style={{
-                width: '100%',
-                padding: '10px 14px',
-                borderRadius: '8px',
-                border: '1.5px solid var(--border-strong)',
-                fontSize: '0.9rem',
-                fontFamily: 'var(--font-family)'
-              }}
-            />
+            <div style={{ position: 'relative' }}>
+              <input
+                type="email"
+                required
+                placeholder="admin@pulsepoint.health"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                style={{
+                  width: '100%',
+                  padding: '10px 14px 10px 38px',
+                  borderRadius: '8px',
+                  border: '1.5px solid var(--border-strong)',
+                  fontSize: '0.9rem',
+                  fontFamily: 'var(--font-family)'
+                }}
+              />
+              <Mail size={16} color="var(--text-muted)" style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)' }} />
+            </div>
           </div>
 
           <div>
             <label style={{ display: 'block', fontSize: '0.825rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '4px' }}>
               Password:
             </label>
-            <input
-              type="password"
-              required
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              style={{
-                width: '100%',
-                padding: '10px 14px',
-                borderRadius: '8px',
-                border: '1.5px solid var(--border-strong)',
-                fontSize: '0.9rem',
-                fontFamily: 'var(--font-family)'
-              }}
-            />
+            <div style={{ position: 'relative' }}>
+              <input
+                type="password"
+                required
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                style={{
+                  width: '100%',
+                  padding: '10px 14px 10px 38px',
+                  borderRadius: '8px',
+                  border: '1.5px solid var(--border-strong)',
+                  fontSize: '0.9rem',
+                  fontFamily: 'var(--font-family)'
+                }}
+              />
+              <Lock size={16} color="var(--text-muted)" style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)' }} />
+            </div>
           </div>
 
           <button
             type="submit"
             className="pulse-btn pulse-btn-primary"
-            style={{ width: '100%', padding: '12px', marginTop: '8px', fontSize: '0.95rem' }}
+            style={{ width: '100%', padding: '12px', marginTop: '8px', fontSize: '0.95rem', fontWeight: 800 }}
             disabled={isLoading}
           >
-            {isLoading ? 'Processing...' : isRegisterMode ? 'Register & Continue' : 'Sign In'}
+            {isLoading ? 'Authenticating...' : isRegisterMode ? 'Register & Continue' : 'Sign In'}
             <ArrowRight size={16} />
           </button>
         </form>

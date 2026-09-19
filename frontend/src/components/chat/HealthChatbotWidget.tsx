@@ -85,10 +85,10 @@ export const HealthChatbotWidget: React.FC = () => {
       return {
         id: Date.now().toString(),
         sender: 'bot',
-        text: "🧠 **Headache Assessment:**\n- **Tension/Dehydration**: Rest in a dark room, hydrate with electrolyte fluids, and avoid screen glare.\n- **Migraine**: Note if you experience aura, light sensitivity, or nausea.\n- **Red Flags**: Sudden severe 'thunderclap' headache, stiff neck, or fever requires emergency evaluation.\n\nRecommended specialist: **Neurologist** (Dr. Ethan Ross).",
+        text: "🧠 **Headache Assessment:**\n- **Tension/Dehydration**: Rest in a dark room, hydrate with electrolyte fluids, and avoid screen glare.\n- **Migraine**: Note if you experience aura, light sensitivity, or nausea.\n- **Red Flags**: Sudden severe 'thunderclap' headache, stiff neck, or fever requires emergency evaluation.\n\nRecommended specialist: **Neurologist** (Dr. Marcus Vance, MD).",
         timestamp: timeNow,
         suggestedActions: [
-          { label: 'Book Neurologist', action: 'find_neurology' },
+          { label: 'Book Dr. Marcus Vance (Neurology)', action: 'find_neurology' },
           { label: 'Ask About Medications', action: 'med_info' }
         ]
       };
@@ -99,10 +99,10 @@ export const HealthChatbotWidget: React.FC = () => {
       return {
         id: Date.now().toString(),
         sender: 'bot',
-        text: "🌡️ **Respiratory & Fever Guidance:**\n- Measure temperature every 4 hours.\n- Maintain high hydration and consider saline gargles for sore throat.\n- If fever exceeds 103°F (39.4°C) or lasts >3 consecutive days with shortness of breath, consult a physician promptly.\n\nRecommended: **General Physician / Internal Medicine** (Dr. Sarah Mitchell).",
+        text: "🌡️ **Respiratory & Fever Guidance:**\n- Measure temperature every 4 hours.\n- Maintain high hydration and consider saline gargles for sore throat.\n- If fever exceeds 103°F (39.4°C) or lasts >3 consecutive days with shortness of breath, consult a physician promptly.\n\nRecommended: **Pulmonologist / Pediatrician** (Dr. Arthur Pendelton / Dr. Ananya Sharma).",
         timestamp: timeNow,
         suggestedActions: [
-          { label: 'Book General Physician', action: 'find_physician' },
+          { label: 'Consult Dr. Arthur Pendelton', action: 'find_pulm' },
           { label: 'Start Telehealth Exam', action: 'telehealth' }
         ]
       };
@@ -113,10 +113,10 @@ export const HealthChatbotWidget: React.FC = () => {
       return {
         id: Date.now().toString(),
         sender: 'bot',
-        text: "🧴 **Dermatological Health:**\n- Avoid scratching or applying harsh steroid creams without diagnosis.\n- You can upload high-resolution photos during your Telehealth consultation or direct message our dermatologist.\n\nRecommended specialist: **Dermatologist** (Dr. Maya Patel / Dr. Chloe Bennett).",
+        text: "🧴 **Dermatological Health:**\n- Avoid scratching or applying harsh steroid creams without diagnosis.\n- You can upload high-resolution photos during your Telehealth consultation or direct message our dermatologist.\n\nRecommended specialist: **Dermatologist** (Dr. Elena Rostova, MD).",
         timestamp: timeNow,
         suggestedActions: [
-          { label: 'View Dermatologists', action: 'find_derma' }
+          { label: 'Message Dr. Elena Rostova', action: 'find_derma' }
         ]
       };
     }
@@ -126,10 +126,10 @@ export const HealthChatbotWidget: React.FC = () => {
       return {
         id: Date.now().toString(),
         sender: 'bot',
-        text: "🦴 **Orthopedic & Spine Care:**\n- Use R.I.C.E. protocol (Rest, Ice, Compression, Elevation) for acute joint sprains.\n- For chronic lower back or knee discomfort, our orthopedists can review imaging (X-Ray/MRI) and provide targeted physical therapy regimens.\n\nRecommended specialist: **Orthopedics** (Dr. David Kim / Dr. Lucas Wright).",
+        text: "🦴 **Orthopedic & Spine Care:**\n- Use R.I.C.E. protocol (Rest, Ice, Compression, Elevation) for acute joint sprains.\n- For chronic lower back or knee discomfort, our orthopedists can review imaging (X-Ray/MRI) and provide targeted physical therapy regimens.\n\nRecommended specialist: **Orthopedics** (Dr. David Chen, MD).",
         timestamp: timeNow,
         suggestedActions: [
-          { label: 'Book Orthopedic Surgeon', action: 'find_ortho' }
+          { label: 'Book Dr. David Chen (Orthopedics)', action: 'find_ortho' }
         ]
       };
     }
@@ -139,10 +139,10 @@ export const HealthChatbotWidget: React.FC = () => {
       return {
         id: Date.now().toString(),
         sender: 'bot',
-        text: "❤️ **Cardiovascular Wellness:**\n- Monitor resting heart rate and blood pressure twice daily.\n- High blood pressure (Hypertension) and lipid management require routine ECG and lipid panel screening.\n\nRecommended specialist: **Cardiologist** (Dr. Marcus Vance / Dr. Emily Chen).",
+        text: "❤️ **Cardiovascular Wellness:**\n- Monitor resting heart rate and blood pressure twice daily.\n- High blood pressure (Hypertension) and lipid management require routine ECG and lipid panel screening.\n\nRecommended specialist: **Cardiologist** (Dr. Sarah Jenkins, MD).",
         timestamp: timeNow,
         suggestedActions: [
-          { label: 'Consult Cardiologist', action: 'find_cardio' }
+          { label: 'Consult Dr. Sarah Jenkins (Cardiology)', action: 'find_cardio' }
         ]
       };
     }

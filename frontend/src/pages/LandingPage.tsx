@@ -88,8 +88,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
       }
 
       setDoctors(sorted);
-      if (sorted.length > 0 && !selectedDoctor) {
-        setSelectedDoctor(sorted[0]);
+      if (sorted.length > 0) {
+        if (!selectedDoctor || !sorted.some(d => d.id === selectedDoctor.id)) {
+          setSelectedDoctor(sorted[0]);
+        }
+      } else {
+        setSelectedDoctor(null);
       }
     } catch (err) {
       console.error('Failed to load doctors:', err);
@@ -308,7 +312,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
               key={idx}
               onClick={() => {
                 setSelectedSpecialty(sym.specialty);
-                setSearchTerm(sym.label);
+                setSearchTerm('');
               }}
               style={{
                 background: 'var(--bg-subtle)',

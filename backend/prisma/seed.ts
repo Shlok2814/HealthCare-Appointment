@@ -218,6 +218,96 @@ async function main() {
         { weekday: 4, startTime: '09:00', endTime: '17:00' },
         { weekday: 5, startTime: '09:00', endTime: '17:00' }
       ]
+    },
+    {
+      name: 'Dr. Arthur Pendelton, MD',
+      email: 'dr.arthur@pulsepoint.health',
+      specialization: 'Pulmonology',
+      bio: 'Pulmonologist and Critical Care specialist from Harvard Medical School focused on advanced asthma, COPD, interstitial lung disease, and sleep apnea.',
+      consultationFee: 120.0,
+      experienceYears: 15,
+      rating: 4.96,
+      workingHours: [
+        { weekday: 1, startTime: '08:30', endTime: '16:30' },
+        { weekday: 2, startTime: '08:30', endTime: '16:30' },
+        { weekday: 3, startTime: '08:30', endTime: '16:30' },
+        { weekday: 5, startTime: '08:30', endTime: '16:00' }
+      ]
+    },
+    {
+      name: 'Dr. Meera Nambiar, MD',
+      email: 'dr.meera@pulsepoint.health',
+      specialization: 'Rheumatology',
+      bio: 'Stanford-trained clinical rheumatologist specializing in autoimmune pathologies, rheumatoid arthritis, lupus nephritis, and biologics therapy.',
+      consultationFee: 130.0,
+      experienceYears: 13,
+      rating: 4.94,
+      workingHours: [
+        { weekday: 1, startTime: '09:00', endTime: '17:00' },
+        { weekday: 3, startTime: '09:00', endTime: '17:00' },
+        { weekday: 4, startTime: '09:00', endTime: '17:00' },
+        { weekday: 5, startTime: '09:00', endTime: '16:00' }
+      ]
+    },
+    {
+      name: 'Dr. Julian Rivera, MD',
+      email: 'dr.julian@pulsepoint.health',
+      specialization: 'Urology',
+      bio: 'Mayo Clinic fellowship-trained Urological Surgeon specializing in minimally invasive laparoscopic surgery, kidney stone removal, and prostate oncology.',
+      consultationFee: 125.0,
+      experienceYears: 14,
+      rating: 4.92,
+      workingHours: [
+        { weekday: 2, startTime: '09:00', endTime: '17:00' },
+        { weekday: 3, startTime: '09:00', endTime: '17:00' },
+        { weekday: 4, startTime: '09:00', endTime: '17:00' },
+        { weekday: 6, startTime: '09:00', endTime: '13:00' }
+      ]
+    },
+    {
+      name: 'Dr. Rachel Goldstein, MD',
+      email: 'dr.rachel@pulsepoint.health',
+      specialization: 'Allergy & Immunology',
+      bio: 'Johns Hopkins Pediatric & Adult Allergist specializing in environmental immunotherapies, severe anaphylaxis, drug allergies, and chronic urticaria.',
+      consultationFee: 100.0,
+      experienceYears: 10,
+      rating: 4.97,
+      workingHours: [
+        { weekday: 1, startTime: '09:00', endTime: '17:00' },
+        { weekday: 2, startTime: '09:00', endTime: '17:00' },
+        { weekday: 3, startTime: '09:00', endTime: '17:00' },
+        { weekday: 4, startTime: '09:00', endTime: '17:00' }
+      ]
+    },
+    {
+      name: 'Dr. Tariq Al-Hassan, MD',
+      email: 'dr.tariq@pulsepoint.health',
+      specialization: 'Nephrology',
+      bio: 'Cleveland Clinic Consultant Nephrologist expert in glomerular diseases, renal failure preservation, hypertension management, and transplant follow-up.',
+      consultationFee: 135.0,
+      experienceYears: 16,
+      rating: 4.95,
+      workingHours: [
+        { weekday: 1, startTime: '08:00', endTime: '16:00' },
+        { weekday: 2, startTime: '08:00', endTime: '16:00' },
+        { weekday: 4, startTime: '08:00', endTime: '16:00' },
+        { weekday: 5, startTime: '08:00', endTime: '15:00' }
+      ]
+    },
+    {
+      name: 'Dr. Chloe Desjardins, MD',
+      email: 'dr.chloe@pulsepoint.health',
+      specialization: 'Physical Medicine & Rehab',
+      bio: 'Columbia University Chief of PM&R specializing in sports concussion rehab, musculoskeletal ultrasonography, and non-surgical spine biomechanics.',
+      consultationFee: 115.0,
+      experienceYears: 12,
+      rating: 4.98,
+      workingHours: [
+        { weekday: 1, startTime: '09:00', endTime: '17:00' },
+        { weekday: 3, startTime: '09:00', endTime: '17:00' },
+        { weekday: 4, startTime: '09:00', endTime: '17:00' },
+        { weekday: 5, startTime: '09:00', endTime: '17:00' }
+      ]
     }
   ];
 

@@ -42,17 +42,28 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
     'Gynecology',
     'Gastroenterology',
     'Oncology',
-    'ENT (Otolaryngology)'
+    'ENT (Otolaryngology)',
+    'Pulmonology',
+    'Rheumatology',
+    'Urology',
+    'Allergy & Immunology',
+    'Nephrology',
+    'Physical Medicine & Rehab'
   ];
 
   const popularSymptoms = [
     { label: 'Chest Tightness', specialty: 'Cardiology' },
     { label: 'Severe Migraine', specialty: 'Neurology' },
-    { label: 'Skin Rash & Acne', specialty: 'Dermatology' },
+    { label: 'Skin Rash & Eczema', specialty: 'Dermatology' },
     { label: 'Knee & Joint Pain', specialty: 'Orthopedics' },
     { label: 'Child Fever & Cough', specialty: 'Pediatrics' },
     { label: 'Anxiety & Sleep', specialty: 'Psychiatry' },
     { label: 'Diabetes & Thyroid', specialty: 'Endocrinology' },
+    { label: 'Asthma & Breath Shortness', specialty: 'Pulmonology' },
+    { label: 'Arthritis & Autoimmune', specialty: 'Rheumatology' },
+    { label: 'Kidney Stones & Urinary', specialty: 'Urology' },
+    { label: 'Food & Seasonal Allergy', specialty: 'Allergy & Immunology' },
+    { label: 'Sports Spine & Muscle Rehab', specialty: 'Physical Medicine & Rehab' },
     { label: 'Eye Strain & Vision', specialty: 'Ophthalmology' },
     { label: 'Acid Reflux & Gut', specialty: 'Gastroenterology' },
     { label: 'Sinus & Allergy', specialty: 'ENT (Otolaryngology)' }

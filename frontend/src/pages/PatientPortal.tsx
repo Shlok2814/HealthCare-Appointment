@@ -6,8 +6,9 @@ import { MedicationVault } from '../components/patient/MedicationVault';
 import { VitalsTrackerModal } from '../components/patient/VitalsTrackerModal';
 import { TelehealthRoomModal } from '../components/telehealth/TelehealthRoomModal';
 import { PrescriptionPrintModal } from '../components/patient/PrescriptionPrintModal';
+import { DoctorDirectChatModal } from '../components/chat/DoctorDirectChatModal';
 import { useAuth } from '../context/AuthContext';
-import { Calendar, Pill, Plus, RefreshCw, AlertCircle, CheckCircle2, Activity, Heart, FileText, Video } from 'lucide-react';
+import { Calendar, Pill, Plus, RefreshCw, AlertCircle, CheckCircle2, Activity, Heart, FileText, Video, MessageSquare } from 'lucide-react';
 
 interface PatientPortalProps {
   onNavigateToBooking: () => void;
@@ -24,6 +25,7 @@ export const PatientPortal: React.FC<PatientPortalProps> = ({ onNavigateToBookin
   const [isVitalsModalOpen, setIsVitalsModalOpen] = useState(false);
   const [activeTelehealthAppt, setActiveTelehealthAppt] = useState<AppointmentDTO | null>(null);
   const [activePrintAppt, setActivePrintAppt] = useState<AppointmentDTO | null>(null);
+  const [activeChatDoctor, setActiveChatDoctor] = useState<any | null>(null);
 
   const fetchAppointments = async () => {
     setIsLoading(true);
@@ -185,6 +187,7 @@ export const PatientPortal: React.FC<PatientPortalProps> = ({ onNavigateToBookin
                   onCancel={handleCancelAppointment}
                   onOpenTelehealth={(a) => setActiveTelehealthAppt(a)}
                   onPrintPrescription={(a) => setActivePrintAppt(a)}
+                  onMessageDoctor={(doc) => setActiveChatDoctor(doc)}
                 />
               ))}
             </div>
@@ -208,6 +211,18 @@ export const PatientPortal: React.FC<PatientPortalProps> = ({ onNavigateToBookin
           appointment={activeTelehealthAppt}
           userRole="PATIENT"
           onClose={() => setActiveTelehealthAppt(null)}
+        />
+      )}
+
+      {/* Direct Doctor Chat Modal */}
+      {activeChatDoctor && (
+        <DoctorDirectChatModal
+          doctor={activeChatDoctor}
+          onClose={() => setActiveChatDoctor(null)}
+          onBookAppointment={() => {
+            setActiveChatDoctor(null);
+            onNavigateToBooking();
+          }}
         />
       )}
 

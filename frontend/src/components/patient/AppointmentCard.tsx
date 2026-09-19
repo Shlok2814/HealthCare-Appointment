@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { AppointmentDTO, AppointmentStatus, TriageUrgency } from '@pulsepoint/shared';
 import { 
   Calendar, Clock, User, FileText, Pill, AlertTriangle, 
-  ShieldCheck, XCircle, ChevronDown, ChevronUp, Video, Printer 
+  ShieldCheck, XCircle, ChevronDown, ChevronUp, Video, Printer, MessageSquare
 } from 'lucide-react';
 
 interface AppointmentCardProps {
@@ -12,6 +12,7 @@ interface AppointmentCardProps {
   onOpenConsultation?: (appointment: AppointmentDTO) => void;
   onOpenTelehealth?: (appointment: AppointmentDTO) => void;
   onPrintPrescription?: (appointment: AppointmentDTO) => void;
+  onMessageDoctor?: (doctor: any) => void;
 }
 
 export const AppointmentCard: React.FC<AppointmentCardProps> = ({
@@ -20,7 +21,8 @@ export const AppointmentCard: React.FC<AppointmentCardProps> = ({
   isDoctorView = false,
   onOpenConsultation,
   onOpenTelehealth,
-  onPrintPrescription
+  onPrintPrescription,
+  onMessageDoctor
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -143,6 +145,28 @@ export const AppointmentCard: React.FC<AppointmentCardProps> = ({
               style={{ fontSize: '0.825rem', padding: '6px 14px', fontWeight: 600 }}
             >
               <Printer size={14} /> Print Rx Summary
+            </button>
+          )}
+
+          {/* Direct Message Doctor */}
+          {!isDoctorView && appointment.doctor && onMessageDoctor && (
+            <button
+              onClick={() => onMessageDoctor(appointment.doctor)}
+              className="pulse-btn"
+              style={{
+                fontSize: '0.825rem',
+                padding: '6px 12px',
+                fontWeight: 700,
+                background: '#FFFFFF',
+                color: 'var(--primary-700)',
+                border: '1.5px solid var(--primary-300)',
+                borderRadius: '8px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '5px'
+              }}
+            >
+              <MessageSquare size={13} color="var(--primary-600)" /> Message
             </button>
           )}
 

@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 
 import { DEFAULT_PHYSICIANS } from '../services/defaultDoctors';
+import { enrichDoctorsWithRotation } from '../services/rotationEngine';
 
 interface LandingPageProps {
   onNavigate: (view: string) => void;
@@ -48,7 +49,7 @@ const filterAndSortDoctors = (
   } else if (sort === 'experience') {
     filtered.sort((a, b) => (b.experienceYears || 0) - (a.experienceYears || 0));
   }
-  return filtered;
+  return enrichDoctorsWithRotation(filtered);
 };
 
 export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {

@@ -88,6 +88,19 @@ export interface VitalsRecord {
   notes?: string;
 }
 
+export type ShiftStatusType = 'ACTIVE_ON_DUTY' | 'NEXT_IN_ROTATION' | 'LOOP_RENEWED' | 'ON_CALL_TELEHEALTH';
+
+export interface DoctorRotationMetadata {
+  shiftStatus: ShiftStatusType;
+  activeShiftWindow: string;
+  shiftLabel: string;
+  handoverDoctorId?: string;
+  handoverDoctorName?: string;
+  handoverTime?: string;
+  nextRenewalTime?: string;
+  is24x7Covered: boolean;
+}
+
 export interface DoctorDTO {
   id: string;
   name: string;
@@ -115,6 +128,7 @@ export interface DoctorDTO {
   };
   reviews?: DoctorReview[];
   acceptsInsurance?: boolean;
+  rotation?: DoctorRotationMetadata;
 }
 
 export interface AvailableSlot {
@@ -123,6 +137,8 @@ export interface AvailableSlot {
   isAvailable: boolean;
   isHeld: boolean;
   heldByCurrentUser?: boolean;
+  tier?: 'Morning Rounds' | 'Afternoon Clinic' | 'Evening Telehealth' | 'Night Urgent Care';
+  isAutoRenewed?: boolean;
 }
 
 export interface AppointmentDTO {

@@ -157,7 +157,7 @@ export const DoctorCard: React.FC<DoctorCardProps> = ({ doctor, onSelect, isSele
             fontSize: '0.875rem', 
             color: 'var(--text-muted)', 
             lineHeight: 1.55, 
-            marginBottom: '16px', 
+            marginBottom: '14px', 
             display: '-webkit-box', 
             WebkitLineClamp: 2, 
             WebkitBoxOrient: 'vertical', 
@@ -165,6 +165,64 @@ export const DoctorCard: React.FC<DoctorCardProps> = ({ doctor, onSelect, isSele
           }}>
             {doctor.bio}
           </p>
+
+          {/* Continuous Rotation & Shift Loop Status */}
+          {doctor.rotation && (
+            <div style={{
+              background: doctor.rotation.shiftStatus === 'ACTIVE_ON_DUTY' 
+                ? 'linear-gradient(135deg, #ECFDF5 0%, #F0FDFA 100%)' 
+                : doctor.rotation.shiftStatus === 'NEXT_IN_ROTATION'
+                ? 'linear-gradient(135deg, #EFF6FF 0%, #F0F9FF 100%)'
+                : 'linear-gradient(135deg, #FAF5FF 0%, #F5F3FF 100%)',
+              border: doctor.rotation.shiftStatus === 'ACTIVE_ON_DUTY'
+                ? '1px solid #A7F3D0'
+                : doctor.rotation.shiftStatus === 'NEXT_IN_ROTATION'
+                ? '1px solid #BAE6FD'
+                : '1px solid #E9D5FF',
+              borderRadius: '12px',
+              padding: '9px 12px',
+              marginBottom: '14px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '4px'
+            }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '6px' }}>
+                <span style={{ 
+                  fontSize: '0.74rem', 
+                  fontWeight: 800, 
+                  color: doctor.rotation.shiftStatus === 'ACTIVE_ON_DUTY' ? '#047857' : doctor.rotation.shiftStatus === 'NEXT_IN_ROTATION' ? '#0284C7' : '#7E22CE',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '5px'
+                }}>
+                  {doctor.rotation.shiftStatus === 'ACTIVE_ON_DUTY' ? (
+                    <>
+                      <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10B981', display: 'inline-block', boxShadow: '0 0 0 2px rgba(16, 185, 129, 0.25)' }} />
+                      <span>Active Shift: {doctor.rotation.activeShiftWindow}</span>
+                    </>
+                  ) : doctor.rotation.shiftStatus === 'NEXT_IN_ROTATION' ? (
+                    <>
+                      <Clock size={12} />
+                      <span>Next on Roster: {doctor.rotation.activeShiftWindow}</span>
+                    </>
+                  ) : (
+                    <>
+                      <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#8B5CF6', display: 'inline-block' }} />
+                      <span>Shift Renewed: {doctor.rotation.nextRenewalTime}</span>
+                    </>
+                  )}
+                </span>
+                <span style={{ fontSize: '0.68rem', fontWeight: 700, color: 'var(--text-muted)', background: '#FFFFFF', padding: '1px 6px', borderRadius: '4px', border: '1px solid rgba(0,0,0,0.06)' }}>
+                  {doctor.rotation.shiftLabel}
+                </span>
+              </div>
+              {doctor.rotation.handoverDoctorName && (
+                <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <span>🔄 Shift Handover to <strong>{doctor.rotation.handoverDoctorName}</strong> at {doctor.rotation.handoverTime}</span>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Highlights Grid */}
           <div style={{ 

@@ -1,5 +1,6 @@
 import { prisma } from '../config/database';
 import { WorkingShift, AvailableSlot, AppointmentStatus } from '@pulsepoint/shared';
+import { computeBackendDoctorRotation, generateBackendPerpetualSlots } from './rotationEngine';
 
 export class DoctorService {
   static async getAllDoctors(query?: { specialty?: string; search?: string }) {
@@ -36,7 +37,7 @@ export class DoctorService {
       }
     });
 
-    return doctors.map(doc => ({
+    const mappedDoctors = doctors.map(doc => ({
       id: doc.userId,
       name: doc.user.name,
       email: doc.user.email,
@@ -48,6 +49,11 @@ export class DoctorService {
       experienceYears: doc.experienceYears,
       rating: doc.rating,
       workingHours: doc.workingHours as unknown as WorkingShift[]
+    }));
+
+    return mappedDoctors.map(doc => ({
+      ...doc,
+      rotation: computeBackendDoctorRotation(doc, mappedDoctors)
     }));
   }
 
@@ -75,7 +81,7 @@ export class DoctorService {
       throw error;
     }
 
-    return {
+    const docDto = {
       id: doc.userId,
       name: doc.user.name,
       email: doc.user.email,
@@ -93,6 +99,11 @@ export class DoctorService {
         reason: l.reason
       }))
     };
+
+    return {
+      ...docDto,
+      rotation: computeBackendDoctorRotation(docDto, [docDto])
+    };
   }
 
   static async getAvailableSlots(doctorId: string, targetDateStr: string, currentPatientId?: string): Promise<AvailableSlot[]> {
@@ -106,45 +117,8 @@ export class DoctorService {
       throw error;
     }
 
-    const targetDate = new Date(`${targetDateStr}T00:00:00.000Z`);
     const dayStart = new Date(`${targetDateStr}T00:00:00.000Z`);
     const dayEnd = new Date(`${targetDateStr}T23:59:59.999Z`);
-
-    // Check if doctor is on leave
-    const leave = await prisma.doctorLeave.findFirst({
-      where: {
-        doctorId,
-        date: {
-          gte: dayStart,
-          lte: dayEnd
-        }
-      }
-    });
-
-    if (leave) {
-      return []; // No slots available when doctor is on leave
-    }
-
-    const weekday = targetDate.getUTCDay();
-    const workingHours = (doctor.workingHours as unknown as WorkingShift[]) || [];
-    const shift = workingHours.find(s => s.weekday === weekday);
-
-    if (!shift) {
-      return []; // Doctor does not practice on this day
-    }
-
-    // Generate potential slots
-    const slots: AvailableSlot[] = [];
-    const [startH, startM] = shift.startTime.split(':').map(Number);
-    const [endH, endM] = shift.endTime.split(':').map(Number);
-
-    const shiftStart = new Date(targetDate);
-    shiftStart.setUTCHours(startH, startM, 0, 0);
-
-    const shiftEnd = new Date(targetDate);
-    shiftEnd.setUTCHours(endH, endM, 0, 0);
-
-    const slotDurationMs = doctor.slotDurationMinutes * 60 * 1000;
 
     // Fetch existing confirmed bookings and active holds
     const now = new Date();
@@ -165,34 +139,15 @@ export class DoctorService {
       })
     ]);
 
-    let current = new Date(shiftStart);
-    while (current.getTime() + slotDurationMs <= shiftEnd.getTime()) {
-      const slotStartTime = new Date(current);
-      const slotEndTime = new Date(current.getTime() + slotDurationMs);
-
-      const isBooked = existingAppointments.some(appt => 
-        appt.slotStart.getTime() === slotStartTime.getTime()
-      );
-
-      const holdMatch = activeHolds.find(hold =>
-        hold.slotStart.getTime() === slotStartTime.getTime()
-      );
-
-      const isHeld = !!holdMatch;
-      const isAvailable = !isBooked && !isHeld;
-
-      slots.push({
-        slotStart: slotStartTime.toISOString(),
-        slotEnd: slotEndTime.toISOString(),
-        isAvailable,
-        isHeld,
-        heldByCurrentUser: holdMatch ? holdMatch.patientId === currentPatientId : false
-      });
-
-      current = new Date(current.getTime() + slotDurationMs);
-    }
-
-    return slots;
+    // Use perpetual loop scheduling engine so slots never run out on any day or after hours
+    return generateBackendPerpetualSlots(
+      doctor,
+      targetDateStr,
+      existingAppointments,
+      activeHolds,
+      currentPatientId,
+      now
+    );
   }
 
   static async registerLeave(doctorId: string, dateStr: string, reason?: string) {

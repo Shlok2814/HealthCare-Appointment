@@ -416,7 +416,24 @@ export const SlotPicker: React.FC<SlotPickerProps> = ({
           </div>
         )}
 
-        {/* Slot Grid */}
+        {/* Continuous Rotation & Loop Roster Banner */}
+        <div style={{
+          background: 'linear-gradient(135deg, #F0FDF4 0%, #EFF6FF 100%)',
+          border: '1px solid #BAE6FD',
+          borderRadius: '10px',
+          padding: '8px 10px',
+          marginBottom: '12px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px'
+        }}>
+          <Sparkles size={15} color="#0284C7" style={{ flexShrink: 0 }} />
+          <div style={{ fontSize: '0.72rem', color: '#0F172A', lineHeight: 1.35 }}>
+            <span style={{ fontWeight: 800, color: '#0369A1' }}>Continuous On-Call Rotation:</span> Slots auto-renew in a 24/7 loop. Even after hours, coverage seamlessly rolls forward.
+          </div>
+        </div>
+
+        {/* Slot Grid with Tier Headers */}
         {isLoading ? (
           <div style={{ padding: '28px 12px', textAlign: 'center', color: 'var(--text-muted)' }}>
             <RefreshCw size={20} className="pulse-spin" style={{ color: '#0284C7', margin: '0 auto 8px' }} />
@@ -429,35 +446,51 @@ export const SlotPicker: React.FC<SlotPickerProps> = ({
             <div style={{ fontSize: '0.72rem', marginTop: '2px' }}>Choose another date above.</div>
           </div>
         ) : (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '6px', maxHeight: '240px', overflowY: 'auto', paddingRight: '2px' }}>
-            {slots.map((slot, index) => {
-              const isSelected = selectedSlot?.slotStart === slot.slotStart;
-              let btnClass = 'slot-btn';
-
-              if (isSelected) {
-                btnClass += ' selected';
-              } else if (slot.heldByCurrentUser) {
-                btnClass += ' held-by-me';
-              } else if (slot.isHeld) {
-                btnClass += ' held-by-others';
-              } else if (!slot.isAvailable) {
-                btnClass += ' booked';
-              }
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxHeight: '250px', overflowY: 'auto', paddingRight: '2px' }}>
+            {['Morning Rounds', 'Afternoon Clinic', 'Evening Telehealth', 'Night Urgent Care'].map((tierName) => {
+              const tierSlots = slots.filter(s => (s.tier || 'Morning Rounds') === tierName);
+              if (tierSlots.length === 0) return null;
 
               return (
-                <button
-                  key={index}
-                  type="button"
-                  className={btnClass}
-                  disabled={(!slot.isAvailable && !slot.heldByCurrentUser) || isHolding}
-                  onClick={() => handleSlotClick(slot)}
-                  style={{ minHeight: '44px', padding: '5px 3px' }}
-                >
-                  <span style={{ fontSize: '0.78rem', fontWeight: 800 }}>{formatSlotTime(slot.slotStart)}</span>
-                  <span style={{ fontSize: '0.62rem', marginTop: '1px', fontWeight: 700 }}>
-                    {isSelected ? '✓ Selected' : slot.isHeld && !slot.heldByCurrentUser ? 'Held' : slot.isAvailable ? 'Open' : 'Booked'}
-                  </span>
-                </button>
+                <div key={tierName} style={{ background: '#F8FAFC', padding: '8px', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
+                  <div style={{ fontSize: '0.7rem', fontWeight: 800, color: '#475569', marginBottom: '6px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span>{tierName === 'Morning Rounds' ? '☀️ Morning Rounds (08:30 - 12:00)' : tierName === 'Afternoon Clinic' ? '⛅ Afternoon Clinic (13:30 - 17:00)' : tierName === 'Evening Telehealth' ? '🌙 Evening Telehealth (17:30 - 20:30)' : '⚡ 24/7 Urgent Telehealth (21:00 - 22:30)'}</span>
+                    <span style={{ fontSize: '0.64rem', color: '#0284C7', fontWeight: 700 }}>{tierSlots.filter(s => s.isAvailable).length} open</span>
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '5px' }}>
+                    {tierSlots.map((slot, index) => {
+                      const isSelected = selectedSlot?.slotStart === slot.slotStart;
+                      let btnClass = 'slot-btn';
+
+                      if (isSelected) {
+                        btnClass += ' selected';
+                      } else if (slot.heldByCurrentUser) {
+                        btnClass += ' held-by-me';
+                      } else if (slot.isHeld) {
+                        btnClass += ' held-by-others';
+                      } else if (!slot.isAvailable) {
+                        btnClass += ' booked';
+                      }
+
+                      return (
+                        <button
+                          key={index}
+                          type="button"
+                          className={btnClass}
+                          disabled={(!slot.isAvailable && !slot.heldByCurrentUser) || isHolding}
+                          onClick={() => handleSlotClick(slot)}
+                          style={{ minHeight: '40px', padding: '4px 2px' }}
+                        >
+                          <span style={{ fontSize: '0.76rem', fontWeight: 800 }}>{formatSlotTime(slot.slotStart)}</span>
+                          <span style={{ fontSize: '0.6rem', marginTop: '1px', fontWeight: 700 }}>
+                            {isSelected ? '✓ Selected' : slot.isHeld && !slot.heldByCurrentUser ? 'Held' : slot.isAvailable ? 'Open' : slot.isAutoRenewed ? 'Renewed' : 'Booked'}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
               );
             })}
           </div>

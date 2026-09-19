@@ -60,7 +60,7 @@ export const AdminPortal: React.FC = () => {
             marginBottom: '-2px'
           }}
         >
-          <Users size={18} /> User & Clinician Directory
+          <Users size={18} /> Staff & Patient Management
         </button>
       </div>
 

@@ -234,7 +234,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
         <div style={{ marginBottom: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '16px' }}>
           <div>
             <h2 style={{ fontSize: '2rem', fontWeight: 900, color: 'var(--text-main)', letterSpacing: '-0.02em' }}>
-              Specialist Directory ({doctors.length})
+              Find Top Medical Specialists ({doctors.length})
             </h2>
             <p style={{ fontSize: '0.95rem', color: 'var(--text-muted)', marginTop: '2px' }}>
               Filter by medical department or search symptoms to connect with verified specialists.

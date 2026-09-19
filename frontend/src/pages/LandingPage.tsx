@@ -451,7 +451,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
         </div>
 
         {/* Main Grid: Doctors List & Sticky Slot Picker */}
-        <div style={{ display: 'grid', gridTemplateColumns: selectedDoctor ? '1.15fr 0.85fr' : '1fr', gap: '28px' }}>
+        <div className={`booking-main-grid ${selectedDoctor ? 'has-selected-doctor' : ''}`}>
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
               <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--text-main)', margin: 0 }}>
@@ -495,74 +495,19 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
 
           {/* Slot Picker for Selected Doctor */}
           {selectedDoctor && (
-            <div style={{ position: 'sticky', top: '90px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              {/* Doctor Quick Action Card */}
-              <div style={{
-                background: '#FFFFFF',
-                borderRadius: '18px',
-                padding: '18px 22px',
-                border: '1.5px solid #BAE6FD',
-                boxShadow: '0 4px 15px rgba(2, 132, 199, 0.08)',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                gap: '12px',
-                flexWrap: 'wrap'
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <div style={{
-                    width: '42px',
-                    height: '42px',
-                    borderRadius: '12px',
-                    background: 'linear-gradient(135deg, #0284C7, #0D9488)',
-                    color: '#FFF',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontWeight: 900,
-                    fontSize: '1.1rem',
-                    boxShadow: '0 2px 8px rgba(2, 132, 199, 0.3)'
-                  }}>
-                    {selectedDoctor.name.replace('Dr. ', '').charAt(0)}
-                  </div>
-                  <div>
-                    <div style={{ fontWeight: 800, fontSize: '0.95rem', color: 'var(--text-main)' }}>
-                      {selectedDoctor.name}
-                    </div>
-                    <div style={{ fontSize: '0.78rem', color: '#0284C7', fontWeight: 700 }}>
-                      {selectedDoctor.specialization} • ₹{selectedDoctor.consultationFee} / consult
-                    </div>
-                  </div>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => setIsDoctorChatOpen(true)}
-                  className="pulse-btn"
-                  style={{
-                    padding: '7px 14px',
-                    fontSize: '0.8rem',
-                    fontWeight: 700,
-                    background: '#EFF6FF',
-                    color: '#0284C7',
-                    border: '1px solid #BFDBFE',
-                    borderRadius: '10px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    cursor: 'pointer'
-                  }}
-                >
-                  <MessageSquare size={14} color="#0284C7" />
-                  <span>Message Doctor</span>
-                </button>
-              </div>
-
+            <div style={{ position: 'sticky', top: '90px', width: '100%', display: 'flex', justifyContent: 'center' }}>
               <SlotPicker
                 doctorId={selectedDoctor.id}
                 doctorName={selectedDoctor.name}
+                doctorSpecialization={selectedDoctor.specialization}
+                consultationFee={selectedDoctor.consultationFee}
                 selectedSlot={selectedSlot}
                 onSlotSelected={handleSlotSelected}
+                onClose={() => {
+                  setSelectedDoctor(null);
+                  setSelectedSlot(null);
+                }}
+                onOpenMessage={() => setIsDoctorChatOpen(true)}
               />
             </div>
           )}

@@ -15,18 +15,19 @@ export const EmergencyUrgentModal: React.FC<EmergencyUrgentModalProps> = ({
       <div 
         className="pulse-modal" 
         style={{ 
-          maxWidth: '680px', 
+          maxWidth: '500px', 
           width: '92vw', 
-          padding: '28px',
-          borderRadius: '16px',
-          border: '2px solid #EF4444' 
+          padding: '22px',
+          borderRadius: '20px',
+          border: '1.5px solid #FECACA',
+          boxShadow: '0 20px 40px -10px rgba(220, 38, 38, 0.15), 0 0 0 1px rgba(239, 68, 68, 0.1)'
         }}
       >
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <div style={{ 
-              width: '44px', 
-              height: '44px', 
+              width: '40px', 
+              height: '40px', 
               borderRadius: '12px', 
               background: '#FEE2E2', 
               color: '#DC2626', 
@@ -34,22 +35,23 @@ export const EmergencyUrgentModal: React.FC<EmergencyUrgentModalProps> = ({
               alignItems: 'center', 
               justifyContent: 'center' 
             }}>
-              <AlertOctagon size={26} />
+              <AlertOctagon size={22} />
             </div>
             <div>
-              <div style={{ color: '#DC2626', fontWeight: 800, fontSize: '0.8rem', letterSpacing: '0.05em' }}>
-                24/7 RAPID CLINICAL ASSISTANCE
+              <div style={{ color: '#DC2626', fontWeight: 800, fontSize: '0.72rem', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+                24/7 Rapid Clinical Care
               </div>
-              <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--text-main)', margin: '2px 0 0' }}>
-                Emergency & Urgent Care Guidance
-              </h2>
+              <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--text-main)', margin: 0 }}>
+                Emergency & Urgent Guidance
+              </h3>
             </div>
           </div>
           <button 
+            type="button"
             onClick={onClose}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)' }}
+            style={{ background: '#F1F5F9', border: 'none', cursor: 'pointer', color: 'var(--text-muted)', borderRadius: '8px', padding: '6px' }}
           >
-            <X size={22} />
+            <X size={18} />
           </button>
         </div>
 
@@ -57,58 +59,59 @@ export const EmergencyUrgentModal: React.FC<EmergencyUrgentModalProps> = ({
         <div style={{ 
           background: '#FEF2F2', 
           border: '1px solid #FCA5A5', 
-          borderRadius: '10px', 
-          padding: '14px 16px', 
-          marginBottom: '20px',
+          borderRadius: '12px', 
+          padding: '12px 14px', 
+          marginBottom: '16px',
           color: '#991B1B',
-          fontSize: '0.875rem',
-          lineHeight: 1.5
+          fontSize: '0.8rem',
+          lineHeight: 1.45
         }}>
-          <strong>⚠️ Immediate Life Threat Warning:</strong> If you are experiencing severe chest pain, sudden numbness/paralysis, difficulty breathing, or severe hemorrhage, call <strong>911</strong> or go to the nearest Emergency Room immediately.
+          <strong>⚠️ Immediate Life Threat Warning:</strong> For chest pain, sudden numbness/paralysis, acute shortness of breath, or severe trauma, call <strong>112 / 911</strong> or go to an Emergency Department immediately.
         </div>
 
         {/* Action Options */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '14px', marginBottom: '24px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '10px', marginBottom: '18px' }}>
           {/* Option 1: Instant AI Triage */}
           <div 
             className="pulse-card pulse-card-hover"
             style={{ 
-              padding: '16px', 
+              padding: '12px 14px', 
               display: 'flex', 
               alignItems: 'center', 
               justifyContent: 'space-between',
               cursor: 'pointer',
-              border: '1px solid var(--primary-300)',
-              background: 'var(--primary-50)'
+              border: '1.5px solid #BAE6FD',
+              background: '#F0F9FF',
+              borderRadius: '12px'
             }}
             onClick={() => {
               onClose();
               onInstantTriage();
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <div style={{ 
-                width: '40px', 
-                height: '40px', 
-                borderRadius: '50%', 
-                background: 'var(--primary-600)', 
+                width: '36px', 
+                height: '36px', 
+                borderRadius: '10px', 
+                background: 'linear-gradient(135deg, #0284C7, #0D9488)', 
                 color: '#FFF', 
                 display: 'flex', 
                 alignItems: 'center', 
                 justifyContent: 'center' 
               }}>
-                <Zap size={20} />
+                <Zap size={18} />
               </div>
               <div>
-                <div style={{ fontWeight: 700, color: 'var(--primary-900)', fontSize: '1rem' }}>
-                  Instant AI Clinical Triage & Queue
+                <div style={{ fontWeight: 800, color: '#0369A1', fontSize: '0.9rem' }}>
+                  Instant AI Clinical Triage
                 </div>
-                <div style={{ fontSize: '0.8rem', color: 'var(--primary-700)' }}>
-                  Submit symptoms for real-time acuity scoring and priority slot hold.
+                <div style={{ fontSize: '0.74rem', color: '#0284C7' }}>
+                  Real-time symptom scoring & priority doctor slot hold
                 </div>
               </div>
             </div>
-            <span className="pulse-btn pulse-btn-primary" style={{ padding: '6px 12px', fontSize: '0.8rem' }}>
+            <span className="pulse-btn pulse-btn-primary" style={{ padding: '5px 10px', fontSize: '0.75rem', borderRadius: '8px' }}>
               Start Triage
             </span>
           </div>
@@ -117,39 +120,41 @@ export const EmergencyUrgentModal: React.FC<EmergencyUrgentModalProps> = ({
           <div 
             className="pulse-card"
             style={{ 
-              padding: '16px', 
+              padding: '12px 14px', 
               display: 'flex', 
               alignItems: 'center', 
               justifyContent: 'space-between',
-              background: 'var(--bg-subtle)'
+              background: '#F8FAFC',
+              border: '1px solid #E2E8F0',
+              borderRadius: '12px'
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <div style={{ 
-                width: '40px', 
-                height: '40px', 
-                borderRadius: '50%', 
+                width: '36px', 
+                height: '36px', 
+                borderRadius: '10px', 
                 background: '#0D9488', 
                 color: '#FFF', 
                 display: 'flex', 
                 alignItems: 'center', 
                 justifyContent: 'center' 
               }}>
-                <PhoneCall size={20} />
+                <PhoneCall size={18} />
               </div>
               <div>
-                <div style={{ fontWeight: 700, color: 'var(--text-main)', fontSize: '1rem' }}>
-                  PulsePoint 24/7 Clinical Hotline
+                <div style={{ fontWeight: 800, color: 'var(--text-main)', fontSize: '0.9rem' }}>
+                  24/7 Clinical Nurse Hotline
                 </div>
-                <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-                  Toll-Free triage nurse: <strong>1-800-PULSE-MD (1-800-785-7363)</strong>
+                <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>
+                  Toll-Free: <strong>1-800-PULSE-MD</strong> (1-800-785-7363)
                 </div>
               </div>
             </div>
             <a 
               href="tel:18007857363" 
               className="pulse-btn"
-              style={{ background: '#0D9488', color: '#FFF', padding: '6px 12px', fontSize: '0.8rem', textDecoration: 'none' }}
+              style={{ background: '#0D9488', color: '#FFF', padding: '5px 10px', fontSize: '0.75rem', textDecoration: 'none', borderRadius: '8px' }}
             >
               Call Now
             </a>
@@ -159,43 +164,48 @@ export const EmergencyUrgentModal: React.FC<EmergencyUrgentModalProps> = ({
           <div 
             className="pulse-card"
             style={{ 
-              padding: '16px', 
+              padding: '12px 14px', 
               display: 'flex', 
               alignItems: 'center', 
               justifyContent: 'space-between',
-              background: 'var(--bg-subtle)'
+              background: '#F8FAFC',
+              border: '1px solid #E2E8F0',
+              borderRadius: '12px'
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <div style={{ 
-                width: '40px', 
-                height: '40px', 
-                borderRadius: '50%', 
+                width: '36px', 
+                height: '36px', 
+                borderRadius: '10px', 
                 background: '#7C3AED', 
                 color: '#FFF', 
                 display: 'flex', 
                 alignItems: 'center', 
                 justifyContent: 'center' 
               }}>
-                <ShieldAlert size={20} />
+                <ShieldAlert size={18} />
               </div>
               <div>
-                <div style={{ fontWeight: 700, color: 'var(--text-main)', fontSize: '1rem' }}>
-                  Crisis & Poison Control Helpline
+                <div style={{ fontWeight: 800, color: 'var(--text-main)', fontSize: '0.9rem' }}>
+                  Crisis & Helpline
                 </div>
-                <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-                  National Suicide & Crisis Lifeline: <strong>988</strong> | Poison Control: <strong>1-800-222-1222</strong>
+                <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>
+                  National Lifeline: <strong>988</strong> | Poison: <strong>1-800-222-1222</strong>
                 </div>
               </div>
             </div>
-            <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#7C3AED' }}>24/7 Free</span>
+            <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#7C3AED', background: '#F3E8FF', padding: '3px 8px', borderRadius: '6px' }}>
+              24/7 Free
+            </span>
           </div>
         </div>
 
         <button 
+          type="button"
           onClick={onClose}
           className="pulse-btn pulse-btn-secondary"
-          style={{ width: '100%', padding: '10px' }}
+          style={{ width: '100%', padding: '9px', fontSize: '0.85rem', borderRadius: '10px' }}
         >
           Close Emergency Guide
         </button>

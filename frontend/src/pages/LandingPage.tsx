@@ -382,7 +382,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
                 }}
               >
                 <option value="rating">Top Rated (⭐ 4.9+)</option>
-                <option value="fee_asc">Lowest Consultation Fee ($)</option>
+                <option value="fee_asc">Lowest Consultation Fee (₹)</option>
                 <option value="experience">Most Experienced (Yrs)</option>
               </select>
             </div>
@@ -530,7 +530,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
                       {selectedDoctor.name}
                     </div>
                     <div style={{ fontSize: '0.78rem', color: '#0284C7', fontWeight: 700 }}>
-                      {selectedDoctor.specialization} • ${selectedDoctor.consultationFee} / consult
+                      {selectedDoctor.specialization} • ₹{selectedDoctor.consultationFee} / consult
                     </div>
                   </div>
                 </div>

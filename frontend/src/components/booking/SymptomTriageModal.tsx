@@ -100,7 +100,7 @@ export const SymptomTriageModal: React.FC<SymptomTriageModalProps> = ({
         <div style={{ background: 'var(--bg-subtle)', borderRadius: '12px', padding: '16px', marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div>
             <div style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--text-main)' }}>{doctor.name}</div>
-            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{doctor.specialization} • Fee: ${doctor.consultationFee}</div>
+            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{doctor.specialization} • Fee: ₹{doctor.consultationFee}</div>
           </div>
           <div style={{ textAlign: 'right' }}>
             <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--primary-700)' }}>

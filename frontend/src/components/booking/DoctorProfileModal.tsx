@@ -177,7 +177,7 @@ export const DoctorProfileModal: React.FC<DoctorProfileModalProps> = ({
                 <span>•</span>
                 <span>{doctor.experienceYears || 12}+ Years Practicing</span>
                 <span>•</span>
-                <span>Fee: ${doctor.consultationFee} / consult</span>
+                <span>Fee: ₹{doctor.consultationFee} / consult</span>
               </div>
             </div>
 
@@ -402,7 +402,7 @@ export const DoctorProfileModal: React.FC<DoctorProfileModalProps> = ({
           <div>
             <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700 }}>Consultation Fee</span>
             <div style={{ fontSize: '1.4rem', fontWeight: 900, color: 'var(--primary-700)' }}>
-              ${doctor.consultationFee} <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600 }}>/ 30-min visit</span>
+              ₹{doctor.consultationFee} <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600 }}>/ 30-min visit</span>
             </div>
           </div>
 

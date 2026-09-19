@@ -230,7 +230,7 @@ export const DoctorCard: React.FC<DoctorCardProps> = ({ doctor, onSelect, isSele
               Consultation Fee
             </span>
             <div style={{ fontSize: '1.35rem', fontWeight: 900, color: '#0369A1', fontFamily: 'var(--font-display)', lineHeight: 1.1 }}>
-              ${doctor.consultationFee} <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 600 }}>/ 30 min</span>
+              ₹{doctor.consultationFee} <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 600 }}>/ 30 min</span>
             </div>
           </div>
 

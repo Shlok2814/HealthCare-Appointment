@@ -43,7 +43,7 @@ async function main() {
       email: 'dr.sarah@pulsepoint.health',
       specialization: 'Cardiology',
       bio: 'Board-certified Cardiologist with 14+ years of expertise in cardiovascular interventions, lipidology, and preventive heart health.',
-      consultationFee: 120.0,
+      consultationFee: 1200.0,
       experienceYears: 14,
       rating: 4.95,
       workingHours: [
@@ -59,7 +59,7 @@ async function main() {
       email: 'dr.marcus@pulsepoint.health',
       specialization: 'Neurology',
       bio: 'Specialist in migraine management, neuromuscular disorders, epilepsy, and neuro-rehabilitation from Johns Hopkins.',
-      consultationFee: 140.0,
+      consultationFee: 1400.0,
       experienceYears: 11,
       rating: 4.88,
       workingHours: [
@@ -74,7 +74,7 @@ async function main() {
       email: 'dr.elena@pulsepoint.health',
       specialization: 'Dermatology',
       bio: 'Clinical dermatologist focused on autoimmune skin conditions, acne scarring, eczema, psoriasis, and advanced dermoscopy.',
-      consultationFee: 95.0,
+      consultationFee: 950.0,
       experienceYears: 8,
       rating: 4.92,
       workingHours: [
@@ -90,7 +90,7 @@ async function main() {
       email: 'dr.david@pulsepoint.health',
       specialization: 'Orthopedics',
       bio: 'Consultant Orthopedic Surgeon specializing in arthroscopic sports injuries, joint preservation, cartilage repair, and spine biomechanics.',
-      consultationFee: 110.0,
+      consultationFee: 1100.0,
       experienceYears: 16,
       rating: 4.97,
       workingHours: [
@@ -104,7 +104,7 @@ async function main() {
       email: 'dr.ananya@pulsepoint.health',
       specialization: 'Pediatrics',
       bio: 'Compassionate pediatric specialist providing developmental milestone tracking, immunization schedules, and adolescent wellness.',
-      consultationFee: 85.0,
+      consultationFee: 850.0,
       experienceYears: 9,
       rating: 4.99,
       workingHours: [
@@ -120,7 +120,7 @@ async function main() {
       email: 'dr.robert@pulsepoint.health',
       specialization: 'Psychiatry',
       bio: 'Integrative psychiatrist specializing in mood disorders, adult ADHD, anxiety management, and psycho-pharmacology.',
-      consultationFee: 135.0,
+      consultationFee: 1350.0,
       experienceYears: 13,
       rating: 4.94,
       workingHours: [
@@ -135,7 +135,7 @@ async function main() {
       email: 'dr.fatima@pulsepoint.health',
       specialization: 'Endocrinology',
       bio: 'Leading Endocrinologist focused on complex diabetes management, thyroid dysfunctions, hormonal imbalances, and metabolic health.',
-      consultationFee: 115.0,
+      consultationFee: 1150.0,
       experienceYears: 12,
       rating: 4.91,
       workingHours: [
@@ -150,7 +150,7 @@ async function main() {
       email: 'dr.james@pulsepoint.health',
       specialization: 'Ophthalmology',
       bio: 'Ophthalmic microsurgeon with deep expertise in corneal topography, glaucoma diagnostics, diabetic retinopathy, and laser vision.',
-      consultationFee: 125.0,
+      consultationFee: 1250.0,
       experienceYears: 15,
       rating: 4.96,
       workingHours: [
@@ -165,7 +165,7 @@ async function main() {
       email: 'dr.emily@pulsepoint.health',
       specialization: 'Gynecology',
       bio: 'Attending Ob-Gyn specializing in reproductive endocrinology, prenatal maternal care, and minimally invasive pelvic surgery.',
-      consultationFee: 130.0,
+      consultationFee: 1300.0,
       experienceYears: 10,
       rating: 4.98,
       workingHours: [
@@ -180,7 +180,7 @@ async function main() {
       email: 'dr.liam@pulsepoint.health',
       specialization: 'Gastroenterology',
       bio: 'Gastroenterologist and Hepatologist specializing in irritable bowel syndrome (IBS), GERD, liver pathology, and endoscopy.',
-      consultationFee: 110.0,
+      consultationFee: 1100.0,
       experienceYears: 14,
       rating: 4.89,
       workingHours: [
@@ -195,7 +195,7 @@ async function main() {
       email: 'dr.samantha@pulsepoint.health',
       specialization: 'Oncology',
       bio: 'Hematologist-Oncologist specializing in precision molecular therapies, immunotherapy protocols, and genetic tumor profiling.',
-      consultationFee: 160.0,
+      consultationFee: 1600.0,
       experienceYears: 17,
       rating: 4.99,
       workingHours: [
@@ -209,7 +209,7 @@ async function main() {
       email: 'dr.kenji@pulsepoint.health',
       specialization: 'ENT (Otolaryngology)',
       bio: 'ENT surgeon with sub-specialization in chronic sinusitis, allergic rhinitis, vestibular balance disorders, and vocal cord micro-surgery.',
-      consultationFee: 105.0,
+      consultationFee: 1050.0,
       experienceYears: 11,
       rating: 4.93,
       workingHours: [
@@ -224,7 +224,7 @@ async function main() {
       email: 'dr.arthur@pulsepoint.health',
       specialization: 'Pulmonology',
       bio: 'Pulmonologist and Critical Care specialist from Harvard Medical School focused on advanced asthma, COPD, interstitial lung disease, and sleep apnea.',
-      consultationFee: 120.0,
+      consultationFee: 1200.0,
       experienceYears: 15,
       rating: 4.96,
       workingHours: [
@@ -239,7 +239,7 @@ async function main() {
       email: 'dr.meera@pulsepoint.health',
       specialization: 'Rheumatology',
       bio: 'Stanford-trained clinical rheumatologist specializing in autoimmune pathologies, rheumatoid arthritis, lupus nephritis, and biologics therapy.',
-      consultationFee: 130.0,
+      consultationFee: 1300.0,
       experienceYears: 13,
       rating: 4.94,
       workingHours: [
@@ -254,7 +254,7 @@ async function main() {
       email: 'dr.julian@pulsepoint.health',
       specialization: 'Urology',
       bio: 'Mayo Clinic fellowship-trained Urological Surgeon specializing in minimally invasive laparoscopic surgery, kidney stone removal, and prostate oncology.',
-      consultationFee: 125.0,
+      consultationFee: 1250.0,
       experienceYears: 14,
       rating: 4.92,
       workingHours: [
@@ -269,7 +269,7 @@ async function main() {
       email: 'dr.rachel@pulsepoint.health',
       specialization: 'Allergy & Immunology',
       bio: 'Johns Hopkins Pediatric & Adult Allergist specializing in environmental immunotherapies, severe anaphylaxis, drug allergies, and chronic urticaria.',
-      consultationFee: 100.0,
+      consultationFee: 1000.0,
       experienceYears: 10,
       rating: 4.97,
       workingHours: [
@@ -284,7 +284,7 @@ async function main() {
       email: 'dr.tariq@pulsepoint.health',
       specialization: 'Nephrology',
       bio: 'Cleveland Clinic Consultant Nephrologist expert in glomerular diseases, renal failure preservation, hypertension management, and transplant follow-up.',
-      consultationFee: 135.0,
+      consultationFee: 1350.0,
       experienceYears: 16,
       rating: 4.95,
       workingHours: [
@@ -299,7 +299,7 @@ async function main() {
       email: 'dr.chloe@pulsepoint.health',
       specialization: 'Physical Medicine & Rehab',
       bio: 'Columbia University Chief of PM&R specializing in sports concussion rehab, musculoskeletal ultrasonography, and non-surgical spine biomechanics.',
-      consultationFee: 115.0,
+      consultationFee: 1100.0,
       experienceYears: 12,
       rating: 4.98,
       workingHours: [

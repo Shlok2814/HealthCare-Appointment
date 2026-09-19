@@ -59,7 +59,7 @@ export const DoctorDirectChatModal: React.FC<DoctorDirectChatModalProps> = ({
     const query = patientQuery.toLowerCase();
     
     if (query.includes('fee') || query.includes('cost') || query.includes('price')) {
-      return `My consultation fee is $${doctor.consultationFee} per 30-minute encounter, which covers our full clinical review, diagnosis, and digital prescription issuance.`;
+      return `My consultation fee is ₹${doctor.consultationFee} per 30-minute encounter, which covers our full clinical review, diagnosis, and digital prescription issuance.`;
     }
     if (query.includes('fast') || query.includes('eat') || query.includes('prep') || query.includes('blood test')) {
       return `For metabolic or routine lipid blood panels, an 8 to 12-hour overnight water-only fast is generally advisable. You can bring any past lab reports or medication bottles to our visit.`;

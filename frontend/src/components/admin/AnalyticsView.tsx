@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '../../services/api';
 import { ClinicAnalyticsSummary } from '@pulsepoint/shared';
-import { DollarSign, Calendar, Users, Activity, TrendingUp, CheckCircle, XCircle, RefreshCw } from 'lucide-react';
+import { IndianRupee, Calendar, Users, Activity, TrendingUp, CheckCircle, XCircle, RefreshCw } from 'lucide-react';
 
 export const AnalyticsView: React.FC = () => {
   const [analytics, setAnalytics] = useState<ClinicAnalyticsSummary | null>(null);
@@ -73,11 +73,11 @@ export const AnalyticsView: React.FC = () => {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
             <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase' }}>Gross Revenue</span>
             <div style={{ background: 'var(--success-bg)', color: 'var(--success-text)', padding: '8px', borderRadius: '10px' }}>
-              <DollarSign size={20} />
+              <IndianRupee size={20} />
             </div>
           </div>
           <div style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--text-main)' }}>
-            ${analytics.totalRevenue.toLocaleString()}
+            ₹{analytics.totalRevenue.toLocaleString()}
           </div>
           <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '4px' }}>
             Settled from completed visits

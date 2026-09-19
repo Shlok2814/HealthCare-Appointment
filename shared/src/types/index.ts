@@ -105,6 +105,14 @@ export interface DoctorDTO {
   hospitalAffiliation?: string;
   languages?: string[];
   education?: string;
+  achievements?: string[];
+  certifications?: string[];
+  publicationsCount?: number;
+  ratingBreakdown?: {
+    bedsideManner: number;
+    waitTime: number;
+    clinicalClarity: number;
+  };
   reviews?: DoctorReview[];
   acceptsInsurance?: boolean;
 }

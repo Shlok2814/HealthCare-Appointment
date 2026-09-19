@@ -33,10 +33,10 @@ export const UserManagementView: React.FC = () => {
     }
   };
 
-  const filteredUsers = users.filter(u => 
-    u.name.toLowerCase().includes(search.toLowerCase()) ||
-    u.email.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredUsers = Array.isArray(users) ? users.filter(u => 
+    (u.name || '').toLowerCase().includes((search || '').toLowerCase()) ||
+    (u.email || '').toLowerCase().includes((search || '').toLowerCase())
+  ) : [];
 
   return (
     <div className="pulse-card" style={{ padding: '24px' }}>

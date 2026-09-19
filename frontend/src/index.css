@@ -329,6 +329,35 @@ h1, h2, h3, h4, h5, h6 {
   border: 1px solid var(--border-light);
 }
 
+/* Specialty & Filter Horizontal Scroll Row */
+.specialty-scroll-row {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+  margin-bottom: 24px;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.specialty-scroll-row::-webkit-scrollbar {
+  height: 5px;
+}
+
+.specialty-scroll-row::-webkit-scrollbar-track {
+  background: #F1F5F9;
+  border-radius: 10px;
+}
+
+.specialty-scroll-row::-webkit-scrollbar-thumb {
+  background: #BAE6FD;
+  border-radius: 10px;
+}
+
+.specialty-scroll-row::-webkit-scrollbar-thumb:hover {
+  background: #0284C7;
+}
+
 /* Booking Layout Grid */
 .booking-main-grid {
   display: grid;

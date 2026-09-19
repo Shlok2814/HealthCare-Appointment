@@ -410,7 +410,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
 
         {/* Popular Symptoms Quick Chips */}
         <div style={{ marginBottom: '18px', display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-          <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '4px', flexShrink: 0 }}>
             <Tag size={13} color="#0284C7" /> Quick Symptoms:
           </span>
           {popularSymptoms.map((sym, idx) => (
@@ -426,11 +426,13 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
                 background: selectedSpecialty === sym.specialty ? '#0284C7' : '#FFFFFF',
                 border: selectedSpecialty === sym.specialty ? '1px solid #0284C7' : '1px solid #CBD5E1',
                 borderRadius: '16px',
-                padding: '4px 12px',
+                padding: '5px 14px',
                 fontSize: '0.75rem',
                 fontWeight: 700,
                 color: selectedSpecialty === sym.specialty ? '#FFFFFF' : '#334155',
                 cursor: 'pointer',
+                whiteSpace: 'nowrap',
+                flexShrink: 0,
                 boxShadow: '0 1px 2px rgba(0,0,0,0.04)'
               }}
             >
@@ -440,7 +442,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
         </div>
 
         {/* Specialty Filter Pills Carousel */}
-        <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '16px', marginBottom: '28px' }}>
+        <div className="specialty-scroll-row">
           {specialties.map((spec) => {
             const isActive = selectedSpecialty === spec.name;
             return (
@@ -455,6 +457,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
                   padding: '9px 18px',
                   borderRadius: '30px',
                   whiteSpace: 'nowrap',
+                  flexShrink: 0,
                   background: isActive ? 'linear-gradient(135deg, #0284C7 0%, #0D9488 100%)' : '#FFFFFF',
                   color: isActive ? '#FFFFFF' : 'var(--text-main)',
                   border: isActive ? '1px solid #0284C7' : '1.5px solid #CBD5E1',

@@ -7,11 +7,13 @@ import { AuthPage } from './pages/AuthPage';
 import { PatientPortal } from './pages/PatientPortal';
 import { DoctorPortal } from './pages/DoctorPortal';
 import { AdminPortal } from './pages/AdminPortal';
+import { EmergencyUrgentModal } from './components/common/EmergencyUrgentModal';
 import { UserRole } from '@pulsepoint/shared';
 
 const AppContent: React.FC = () => {
   const { user, isLoading } = useAuth();
   const [currentView, setCurrentView] = useState<string>('landing');
+  const [isEmergencyModalOpen, setIsEmergencyModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
     if (user) {
@@ -50,7 +52,11 @@ const AppContent: React.FC = () => {
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <Navbar currentView={currentView} onNavigate={handleNavigate} />
+      <Navbar 
+        currentView={currentView} 
+        onNavigate={handleNavigate} 
+        onOpenEmergency={() => setIsEmergencyModalOpen(true)}
+      />
 
       <main style={{ flex: 1 }}>
         {currentView === 'landing' && (
@@ -73,6 +79,21 @@ const AppContent: React.FC = () => {
           <AdminPortal />
         )}
       </main>
+
+      {/* Global 24/7 SOS Emergency Modal */}
+      {isEmergencyModalOpen && (
+        <EmergencyUrgentModal
+          onClose={() => setIsEmergencyModalOpen(false)}
+          onInstantTriage={() => {
+            setIsEmergencyModalOpen(false);
+            handleNavigate('landing');
+            setTimeout(() => {
+              const el = document.getElementById('booking-directory');
+              if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+          }}
+        />
+      )}
 
       <Footer />
     </div>

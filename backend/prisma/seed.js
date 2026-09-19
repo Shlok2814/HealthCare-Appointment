@@ -41,7 +41,7 @@ async function main() {
             name: 'Dr. Sarah Jenkins, MD',
             email: 'dr.sarah@pulsepoint.health',
             specialization: 'Cardiology',
-            bio: 'Board-certified Cardiologist with 14+ years of expertise in cardiovascular interventions and preventive lipidology.',
+            bio: 'Board-certified Cardiologist with 14+ years of expertise in cardiovascular interventions, lipidology, and preventive heart health.',
             consultationFee: 120.0,
             experienceYears: 14,
             rating: 4.95,
@@ -57,7 +57,7 @@ async function main() {
             name: 'Dr. Marcus Vance, MD',
             email: 'dr.marcus@pulsepoint.health',
             specialization: 'Neurology',
-            bio: 'Specialist in migraine management, neuromuscular disorders, and neuro-rehabilitation from Johns Hopkins.',
+            bio: 'Specialist in migraine management, neuromuscular disorders, epilepsy, and neuro-rehabilitation from Johns Hopkins.',
             consultationFee: 140.0,
             experienceYears: 11,
             rating: 4.88,
@@ -72,7 +72,7 @@ async function main() {
             name: 'Dr. Elena Rostova, MD',
             email: 'dr.elena@pulsepoint.health',
             specialization: 'Dermatology',
-            bio: 'Clinical dermatologist focused on autoimmune skin conditions, acne scarring, and advanced dermoscopy.',
+            bio: 'Clinical dermatologist focused on autoimmune skin conditions, acne scarring, eczema, psoriasis, and advanced dermoscopy.',
             consultationFee: 95.0,
             experienceYears: 8,
             rating: 4.92,
@@ -88,7 +88,7 @@ async function main() {
             name: 'Dr. David Chen, MD',
             email: 'dr.david@pulsepoint.health',
             specialization: 'Orthopedics',
-            bio: 'Consultant Orthopedic Surgeon specializing in arthroscopic sports injuries, joint preservation, and spine biomechanics.',
+            bio: 'Consultant Orthopedic Surgeon specializing in arthroscopic sports injuries, joint preservation, cartilage repair, and spine biomechanics.',
             consultationFee: 110.0,
             experienceYears: 16,
             rating: 4.97,
@@ -102,7 +102,7 @@ async function main() {
             name: 'Dr. Ananya Sharma, MD',
             email: 'dr.ananya@pulsepoint.health',
             specialization: 'Pediatrics',
-            bio: 'Compassionate pediatric specialist providing developmental assessments, immunization plans, and adolescent health care.',
+            bio: 'Compassionate pediatric specialist providing developmental milestone tracking, immunization schedules, and adolescent wellness.',
             consultationFee: 85.0,
             experienceYears: 9,
             rating: 4.99,
@@ -112,6 +112,110 @@ async function main() {
                 { weekday: 3, startTime: '09:00', endTime: '17:00' },
                 { weekday: 4, startTime: '09:00', endTime: '17:00' },
                 { weekday: 5, startTime: '09:00', endTime: '15:00' }
+            ]
+        },
+        {
+            name: 'Dr. Robert Hayes, MD',
+            email: 'dr.robert@pulsepoint.health',
+            specialization: 'Psychiatry',
+            bio: 'Integrative psychiatrist specializing in mood disorders, adult ADHD, anxiety management, and psycho-pharmacology.',
+            consultationFee: 135.0,
+            experienceYears: 13,
+            rating: 4.94,
+            workingHours: [
+                { weekday: 1, startTime: '11:00', endTime: '19:00' },
+                { weekday: 2, startTime: '11:00', endTime: '19:00' },
+                { weekday: 3, startTime: '11:00', endTime: '19:00' },
+                { weekday: 4, startTime: '11:00', endTime: '19:00' }
+            ]
+        },
+        {
+            name: 'Dr. Fatima Al-Mansoor, MD',
+            email: 'dr.fatima@pulsepoint.health',
+            specialization: 'Endocrinology',
+            bio: 'Leading Endocrinologist focused on complex diabetes management, thyroid dysfunctions, hormonal imbalances, and metabolic health.',
+            consultationFee: 115.0,
+            experienceYears: 12,
+            rating: 4.91,
+            workingHours: [
+                { weekday: 1, startTime: '09:00', endTime: '16:00' },
+                { weekday: 2, startTime: '09:00', endTime: '16:00' },
+                { weekday: 4, startTime: '09:00', endTime: '16:00' },
+                { weekday: 5, startTime: '09:00', endTime: '16:00' }
+            ]
+        },
+        {
+            name: 'Dr. James Wilson, MD',
+            email: 'dr.james@pulsepoint.health',
+            specialization: 'Ophthalmology',
+            bio: 'Ophthalmic microsurgeon with deep expertise in corneal topography, glaucoma diagnostics, diabetic retinopathy, and laser vision.',
+            consultationFee: 125.0,
+            experienceYears: 15,
+            rating: 4.96,
+            workingHours: [
+                { weekday: 2, startTime: '08:30', endTime: '16:30' },
+                { weekday: 3, startTime: '08:30', endTime: '16:30' },
+                { weekday: 4, startTime: '08:30', endTime: '16:30' },
+                { weekday: 6, startTime: '09:00', endTime: '13:30' }
+            ]
+        },
+        {
+            name: 'Dr. Emily Watson, MD',
+            email: 'dr.emily@pulsepoint.health',
+            specialization: 'Gynecology',
+            bio: 'Attending Ob-Gyn specializing in reproductive endocrinology, prenatal maternal care, and minimally invasive pelvic surgery.',
+            consultationFee: 130.0,
+            experienceYears: 10,
+            rating: 4.98,
+            workingHours: [
+                { weekday: 1, startTime: '09:30', endTime: '17:30' },
+                { weekday: 2, startTime: '09:30', endTime: '17:30' },
+                { weekday: 3, startTime: '09:30', endTime: '17:30' },
+                { weekday: 5, startTime: '09:30', endTime: '16:00' }
+            ]
+        },
+        {
+            name: 'Dr. Liam O\'Connor, MD',
+            email: 'dr.liam@pulsepoint.health',
+            specialization: 'Gastroenterology',
+            bio: 'Gastroenterologist and Hepatologist specializing in irritable bowel syndrome (IBS), GERD, liver pathology, and endoscopy.',
+            consultationFee: 110.0,
+            experienceYears: 14,
+            rating: 4.89,
+            workingHours: [
+                { weekday: 1, startTime: '08:00', endTime: '16:00' },
+                { weekday: 3, startTime: '08:00', endTime: '16:00' },
+                { weekday: 4, startTime: '08:00', endTime: '16:00' },
+                { weekday: 5, startTime: '08:00', endTime: '15:00' }
+            ]
+        },
+        {
+            name: 'Dr. Samantha Brooks, MD',
+            email: 'dr.samantha@pulsepoint.health',
+            specialization: 'Oncology',
+            bio: 'Hematologist-Oncologist specializing in precision molecular therapies, immunotherapy protocols, and genetic tumor profiling.',
+            consultationFee: 160.0,
+            experienceYears: 17,
+            rating: 4.99,
+            workingHours: [
+                { weekday: 2, startTime: '09:00', endTime: '17:00' },
+                { weekday: 3, startTime: '09:00', endTime: '17:00' },
+                { weekday: 4, startTime: '09:00', endTime: '17:00' }
+            ]
+        },
+        {
+            name: 'Dr. Kenji Tanaka, MD',
+            email: 'dr.kenji@pulsepoint.health',
+            specialization: 'ENT (Otolaryngology)',
+            bio: 'ENT surgeon with sub-specialization in chronic sinusitis, allergic rhinitis, vestibular balance disorders, and vocal cord micro-surgery.',
+            consultationFee: 105.0,
+            experienceYears: 11,
+            rating: 4.93,
+            workingHours: [
+                { weekday: 1, startTime: '09:00', endTime: '17:00' },
+                { weekday: 2, startTime: '09:00', endTime: '17:00' },
+                { weekday: 4, startTime: '09:00', endTime: '17:00' },
+                { weekday: 5, startTime: '09:00', endTime: '17:00' }
             ]
         }
     ];

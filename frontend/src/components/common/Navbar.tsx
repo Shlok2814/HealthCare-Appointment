@@ -6,9 +6,10 @@ import { UserRole } from '@pulsepoint/shared';
 interface NavbarProps {
   currentView: string;
   onNavigate: (view: string) => void;
+  onOpenEmergency?: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
+export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate, onOpenEmergency }) => {
   const { user, logout, loginAsDemo } = useAuth();
 
   return (
@@ -42,13 +43,13 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
         </div>
 
         {/* Navigation Items */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
           <button
             onClick={() => onNavigate('landing')}
             className={`pulse-btn ${currentView === 'landing' ? 'pulse-btn-secondary' : ''}`}
             style={{ background: currentView === 'landing' ? 'var(--primary-50)' : 'transparent', border: 'none', color: currentView === 'landing' ? 'var(--primary-700)' : 'var(--text-muted)' }}
           >
-            Directory
+            Find Doctors
           </button>
 
           {user && user.role === UserRole.PATIENT && (
@@ -78,6 +79,29 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
               style={{ background: currentView === 'admin' ? 'var(--primary-50)' : 'transparent', border: 'none', color: currentView === 'admin' ? 'var(--primary-700)' : 'var(--text-muted)' }}
             >
               <ShieldCheck size={16} /> Clinic Admin
+            </button>
+          )}
+
+          {/* 24/7 Urgent Care SOS button */}
+          {onOpenEmergency && (
+            <button
+              onClick={onOpenEmergency}
+              className="pulse-btn"
+              style={{ 
+                background: '#FEE2E2', 
+                color: '#DC2626', 
+                border: '1px solid #FCA5A5', 
+                padding: '6px 12px', 
+                fontSize: '0.8rem',
+                fontWeight: 700,
+                borderRadius: '8px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px'
+              }}
+            >
+              <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#DC2626', animation: 'pulse 1.5s infinite' }} />
+              <span>24/7 Urgent Care SOS</span>
             </button>
           )}
         </div>

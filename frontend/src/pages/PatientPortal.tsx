@@ -3,8 +3,11 @@ import { api } from '../services/api';
 import { AppointmentDTO } from '@pulsepoint/shared';
 import { AppointmentCard } from '../components/patient/AppointmentCard';
 import { MedicationVault } from '../components/patient/MedicationVault';
+import { VitalsTrackerModal } from '../components/patient/VitalsTrackerModal';
+import { TelehealthRoomModal } from '../components/telehealth/TelehealthRoomModal';
+import { PrescriptionPrintModal } from '../components/patient/PrescriptionPrintModal';
 import { useAuth } from '../context/AuthContext';
-import { Calendar, Pill, Plus, RefreshCw, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { Calendar, Pill, Plus, RefreshCw, AlertCircle, CheckCircle2, Activity, Heart, FileText, Video } from 'lucide-react';
 
 interface PatientPortalProps {
   onNavigateToBooking: () => void;
@@ -16,6 +19,11 @@ export const PatientPortal: React.FC<PatientPortalProps> = ({ onNavigateToBookin
   const [appointments, setAppointments] = useState<AppointmentDTO[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [notice, setNotice] = useState<string | null>(null);
+
+  // Modals state
+  const [isVitalsModalOpen, setIsVitalsModalOpen] = useState(false);
+  const [activeTelehealthAppt, setActiveTelehealthAppt] = useState<AppointmentDTO | null>(null);
+  const [activePrintAppt, setActivePrintAppt] = useState<AppointmentDTO | null>(null);
 
   const fetchAppointments = async () => {
     setIsLoading(true);
@@ -50,19 +58,37 @@ export const PatientPortal: React.FC<PatientPortalProps> = ({ onNavigateToBookin
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '28px', flexWrap: 'wrap', gap: '16px' }}>
         <div>
           <span className="pulse-badge pulse-badge-info" style={{ marginBottom: '6px' }}>Patient Care Portal</span>
-          <h1 style={{ fontSize: '1.85rem', fontWeight: 800, color: 'var(--text-main)' }}>
-            Welcome back, {user?.name || 'Patient'}
+          <h1 style={{ fontSize: '2rem', fontWeight: 900, color: 'var(--text-main)' }}>
+            Welcome, {user?.name || 'Patient'}
           </h1>
-          <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>
-            Manage your clinical consultations, AI pre-visit summaries, and digital prescriptions
+          <p style={{ fontSize: '0.95rem', color: 'var(--text-muted)' }}>
+            Manage your clinical consultations, live telehealth rooms, digital prescriptions, and vital signs
           </p>
         </div>
 
-        <div style={{ display: 'flex', gap: '12px' }}>
+        <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+          <button
+            onClick={() => setIsVitalsModalOpen(true)}
+            className="pulse-btn"
+            style={{ 
+              background: '#F0FDFA', 
+              color: '#0D9488', 
+              border: '1px solid #99F6E4', 
+              padding: '10px 18px', 
+              fontSize: '0.9rem',
+              fontWeight: 700,
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px'
+            }}
+          >
+            <Activity size={18} /> Vital Signs Vault
+          </button>
+
           <button
             onClick={onNavigateToBooking}
             className="pulse-btn pulse-btn-primary"
-            style={{ padding: '10px 20px', fontSize: '0.9rem' }}
+            style={{ padding: '10px 20px', fontSize: '0.9rem', fontWeight: 700 }}
           >
             <Plus size={16} /> Book New Appointment
           </button>
@@ -157,6 +183,8 @@ export const PatientPortal: React.FC<PatientPortalProps> = ({ onNavigateToBookin
                   key={appt.id}
                   appointment={appt}
                   onCancel={handleCancelAppointment}
+                  onOpenTelehealth={(a) => setActiveTelehealthAppt(a)}
+                  onPrintPrescription={(a) => setActivePrintAppt(a)}
                 />
               ))}
             </div>
@@ -164,6 +192,31 @@ export const PatientPortal: React.FC<PatientPortalProps> = ({ onNavigateToBookin
         </div>
       ) : (
         <MedicationVault />
+      )}
+
+      {/* Vitals Tracker Modal */}
+      {isVitalsModalOpen && (
+        <VitalsTrackerModal
+          patientName={user?.name || 'Patient'}
+          onClose={() => setIsVitalsModalOpen(false)}
+        />
+      )}
+
+      {/* Virtual Telehealth Room */}
+      {activeTelehealthAppt && (
+        <TelehealthRoomModal
+          appointment={activeTelehealthAppt}
+          userRole="PATIENT"
+          onClose={() => setActiveTelehealthAppt(null)}
+        />
+      )}
+
+      {/* Prescription Printable Modal */}
+      {activePrintAppt && (
+        <PrescriptionPrintModal
+          appointment={activePrintAppt}
+          onClose={() => setActivePrintAppt(null)}
+        />
       )}
     </div>
   );

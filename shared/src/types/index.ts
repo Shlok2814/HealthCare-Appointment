@@ -65,6 +65,29 @@ export interface UserDTO {
   createdAt: string;
 }
 
+export interface DoctorReview {
+  id: string;
+  patientName: string;
+  rating: number;
+  comment: string;
+  date: string;
+  verifiedVisit: boolean;
+  tags?: string[];
+}
+
+export interface VitalsRecord {
+  id: string;
+  patientId: string;
+  recordedAt: string;
+  systolicBp: number;
+  diastolicBp: number;
+  heartRate: number;
+  bloodGlucose: number;
+  oxygenSpO2: number;
+  weightKg: number;
+  notes?: string;
+}
+
 export interface DoctorDTO {
   id: string;
   name: string;
@@ -79,6 +102,11 @@ export interface DoctorDTO {
   avatarUrl?: string;
   rating?: number;
   totalConsultations?: number;
+  hospitalAffiliation?: string;
+  languages?: string[];
+  education?: string;
+  reviews?: DoctorReview[];
+  acceptsInsurance?: boolean;
 }
 
 export interface AvailableSlot {

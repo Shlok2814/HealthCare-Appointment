@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { DoctorDTO } from '@pulsepoint/shared';
-import { Star, Clock, DollarSign, Calendar, Award } from 'lucide-react';
+import { Star, Clock, Calendar, Award, Globe, Building2, CheckCircle2, ShieldCheck } from 'lucide-react';
 
 interface DoctorCardProps {
   doctor: DoctorDTO;
@@ -9,6 +9,25 @@ interface DoctorCardProps {
 }
 
 export const DoctorCard: React.FC<DoctorCardProps> = ({ doctor, onSelect, isSelected }) => {
+  const getSpecialtyColor = (specialty: string) => {
+    switch (specialty.toLowerCase()) {
+      case 'cardiology': return { bg: '#FEE2E2', text: '#DC2626', border: '#FCA5A5' };
+      case 'neurology': return { bg: '#EDE9FE', text: '#7C3AED', border: '#DDD6FE' };
+      case 'dermatology': return { bg: '#FEF3C7', text: '#D97706', border: '#FDE68A' };
+      case 'orthopedics': return { bg: '#E0F2FE', text: '#0284C7', border: '#BAE6FD' };
+      case 'pediatrics': return { bg: '#FCE7F3', text: '#DB2777', border: '#FBCFE8' };
+      case 'psychiatry': return { bg: '#F3E8FF', text: '#9333EA', border: '#E9D5FF' };
+      case 'endocrinology': return { bg: '#CCFBF1', text: '#0D9488', border: '#99F6E4' };
+      case 'ophthalmology': return { bg: '#E0E7FF', text: '#4F46E5', border: '#C7D2FE' };
+      case 'gynecology': return { bg: '#FFE4E6', text: '#E11D48', border: '#FECDD3' };
+      case 'gastroenterology': return { bg: '#FEF9C3', text: '#CA8A04', border: '#FEF08A' };
+      case 'oncology': return { bg: '#F1F5F9', text: '#475569', border: '#CBD5E1' };
+      default: return { bg: '#E0F2FE', text: '#0369A1', border: '#BAE6FD' };
+    }
+  };
+
+  const specStyle = getSpecialtyColor(doctor.specialization);
+
   return (
     <div
       className={`pulse-card pulse-card-hover ${isSelected ? 'selected' : ''}`}
@@ -19,59 +38,136 @@ export const DoctorCard: React.FC<DoctorCardProps> = ({ doctor, onSelect, isSele
         justifyContent: 'space-between',
         cursor: 'pointer',
         border: isSelected ? '2px solid var(--primary-600)' : '1px solid var(--border-light)',
-        background: isSelected ? 'var(--primary-50)' : 'var(--bg-card)'
+        background: isSelected ? 'var(--primary-50)' : 'var(--bg-card)',
+        position: 'relative',
+        transition: 'all 0.25s ease'
       }}
       onClick={() => onSelect(doctor)}
     >
       <div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
-          <div>
-            <span className="pulse-badge pulse-badge-info" style={{ marginBottom: '8px' }}>
-              {doctor.specialization}
-            </span>
-            <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-main)', marginTop: '4px' }}>
+        {/* Header Avatar & Name */}
+        <div style={{ display: 'flex', gap: '14px', alignItems: 'flex-start', marginBottom: '14px' }}>
+          <div style={{ 
+            width: '54px', 
+            height: '54px', 
+            borderRadius: '14px', 
+            background: `linear-gradient(135deg, ${specStyle.text}, #0D9488)`,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: '#FFFFFF',
+            fontSize: '1.25rem',
+            fontWeight: 800,
+            flexShrink: 0,
+            boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+          }}>
+            {doctor.name.replace('Dr. ', '').charAt(0)}
+          </div>
+
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+              <span 
+                style={{ 
+                  fontSize: '0.75rem', 
+                  fontWeight: 700, 
+                  background: specStyle.bg, 
+                  color: specStyle.text, 
+                  border: `1px solid ${specStyle.border}`,
+                  padding: '2px 8px', 
+                  borderRadius: '6px' 
+                }}
+              >
+                {doctor.specialization}
+              </span>
+              <span style={{ fontSize: '0.7rem', color: '#10B981', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '2px' }}>
+                <CheckCircle2 size={12} /> Verified MD
+              </span>
+            </div>
+
+            <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-main)', marginTop: '4px', lineHeight: 1.3 }}>
               {doctor.name}
             </h3>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', background: '#FEF3C7', padding: '4px 8px', borderRadius: '8px', color: '#B45309', fontWeight: 700, fontSize: '0.85rem' }}>
+
+          {/* Rating Badge */}
+          <div style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: '4px', 
+            background: '#FEF3C7', 
+            padding: '4px 8px', 
+            borderRadius: '8px', 
+            color: '#B45309', 
+            fontWeight: 800, 
+            fontSize: '0.85rem' 
+          }}>
             <Star size={14} fill="#F59E0B" color="#F59E0B" />
             {doctor.rating ? doctor.rating.toFixed(2) : '4.95'}
           </div>
         </div>
 
-        <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', lineHeight: 1.5, marginBottom: '20px', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+        {/* Bio description */}
+        <p style={{ 
+          fontSize: '0.875rem', 
+          color: 'var(--text-muted)', 
+          lineHeight: 1.5, 
+          marginBottom: '18px', 
+          display: '-webkit-box', 
+          WebkitLineClamp: 3, 
+          WebkitBoxOrient: 'vertical', 
+          overflow: 'hidden' 
+        }}>
           {doctor.bio}
         </p>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', padding: '12px', background: 'var(--bg-subtle)', borderRadius: '10px', marginBottom: '20px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.825rem', color: 'var(--text-main)', fontWeight: 600 }}>
-            <Award size={16} color="var(--primary-600)" />
+        {/* Stats Grid */}
+        <div style={{ 
+          display: 'grid', 
+          gridTemplateColumns: '1fr 1fr', 
+          gap: '10px', 
+          padding: '12px', 
+          background: 'var(--bg-subtle)', 
+          borderRadius: '10px', 
+          marginBottom: '18px' 
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.8rem', color: 'var(--text-main)', fontWeight: 600 }}>
+            <Award size={15} color="var(--primary-600)" />
             <span>{doctor.experienceYears || 10}+ Yrs Exp</span>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.825rem', color: 'var(--text-main)', fontWeight: 600 }}>
-            <Clock size={16} color="var(--primary-600)" />
-            <span>{doctor.slotDurationMinutes} min / slot</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.8rem', color: 'var(--text-main)', fontWeight: 600 }}>
+            <Clock size={15} color="var(--primary-600)" />
+            <span>{doctor.slotDurationMinutes} min consult</span>
           </div>
         </div>
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid var(--border-light)', paddingTop: '16px' }}>
+      {/* Footer Fee & Selection */}
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'space-between', 
+        alignItems: 'center', 
+        borderTop: '1px solid var(--border-light)', 
+        paddingTop: '16px' 
+      }}>
         <div>
-          <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>Consultation Fee</span>
-          <div style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--primary-700)' }}>
+          <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700 }}>
+            Consultation Fee
+          </span>
+          <div style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--primary-700)' }}>
             ${doctor.consultationFee}
           </div>
         </div>
+
         <button
           className={`pulse-btn ${isSelected ? 'pulse-btn-primary' : 'pulse-btn-secondary'}`}
-          style={{ padding: '8px 16px', fontSize: '0.875rem' }}
+          style={{ padding: '8px 16px', fontSize: '0.875rem', fontWeight: 700 }}
           onClick={(e) => {
             e.stopPropagation();
             onSelect(doctor);
           }}
         >
           <Calendar size={16} />
-          {isSelected ? 'Selected' : 'Select Doctor'}
+          {isSelected ? 'Selected' : 'Book Visit'}
         </button>
       </div>
     </div>

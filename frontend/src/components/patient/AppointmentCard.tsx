@@ -1,19 +1,26 @@
 import React, { useState } from 'react';
 import { AppointmentDTO, AppointmentStatus, TriageUrgency } from '@pulsepoint/shared';
-import { Calendar, Clock, User, FileText, Pill, AlertTriangle, ShieldCheck, XCircle, ChevronDown, ChevronUp } from 'lucide-react';
+import { 
+  Calendar, Clock, User, FileText, Pill, AlertTriangle, 
+  ShieldCheck, XCircle, ChevronDown, ChevronUp, Video, Printer 
+} from 'lucide-react';
 
 interface AppointmentCardProps {
   appointment: AppointmentDTO;
   onCancel?: (appointmentId: string) => void;
   isDoctorView?: boolean;
   onOpenConsultation?: (appointment: AppointmentDTO) => void;
+  onOpenTelehealth?: (appointment: AppointmentDTO) => void;
+  onPrintPrescription?: (appointment: AppointmentDTO) => void;
 }
 
 export const AppointmentCard: React.FC<AppointmentCardProps> = ({
   appointment,
   onCancel,
   isDoctorView = false,
-  onOpenConsultation
+  onOpenConsultation,
+  onOpenTelehealth,
+  onPrintPrescription
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -80,7 +87,7 @@ export const AppointmentCard: React.FC<AppointmentCardProps> = ({
           </div>
 
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px', flexWrap: 'wrap' }}>
               <h4 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-main)' }}>
                 {isDoctorView ? appointment.patient?.name : (appointment.doctor as any)?.name || (appointment.doctor as any)?.user?.name || 'Assigned Specialist'}
               </h4>
@@ -95,14 +102,47 @@ export const AppointmentCard: React.FC<AppointmentCardProps> = ({
         </div>
 
         {/* Card Action Buttons */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+          {/* Join Telehealth Virtual Room */}
+          {appointment.status === AppointmentStatus.CONFIRMED && onOpenTelehealth && (
+            <button
+              onClick={() => onOpenTelehealth(appointment)}
+              className="pulse-btn"
+              style={{ 
+                background: '#0D9488', 
+                color: '#FFFFFF', 
+                fontSize: '0.825rem', 
+                padding: '6px 14px',
+                fontWeight: 700,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                boxShadow: '0 2px 8px rgba(13, 148, 136, 0.3)'
+              }}
+            >
+              <Video size={14} /> Join Video Call
+            </button>
+          )}
+
+          {/* Doctor Write Consultation Notes */}
           {isDoctorView && appointment.status === AppointmentStatus.CONFIRMED && onOpenConsultation && (
             <button
               onClick={() => onOpenConsultation(appointment)}
               className="pulse-btn pulse-btn-primary"
               style={{ fontSize: '0.825rem', padding: '6px 14px' }}
             >
-              <FileText size={14} /> Start Consultation
+              <FileText size={14} /> Clinical Notes
+            </button>
+          )}
+
+          {/* Print Official Prescription & Summary */}
+          {appointment.status === AppointmentStatus.COMPLETED && appointment.clinicalRecord && onPrintPrescription && (
+            <button
+              onClick={() => onPrintPrescription(appointment)}
+              className="pulse-btn pulse-btn-secondary"
+              style={{ fontSize: '0.825rem', padding: '6px 14px', fontWeight: 600 }}
+            >
+              <Printer size={14} /> Print Rx Summary
             </button>
           )}
 

@@ -4,8 +4,9 @@ import { AppointmentDTO } from '@pulsepoint/shared';
 import { AppointmentCard } from '../components/patient/AppointmentCard';
 import { ConsultationModal } from '../components/doctor/ConsultationModal';
 import { LeaveManagerModal } from '../components/doctor/LeaveManagerModal';
+import { TelehealthRoomModal } from '../components/telehealth/TelehealthRoomModal';
 import { useAuth } from '../context/AuthContext';
-import { Stethoscope, Calendar, Clock, Coffee, RefreshCw, CheckCircle2 } from 'lucide-react';
+import { Stethoscope, Calendar, Clock, Coffee, RefreshCw, CheckCircle2, Video } from 'lucide-react';
 
 export const DoctorPortal: React.FC = () => {
   const { user } = useAuth();
@@ -13,6 +14,7 @@ export const DoctorPortal: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [consultingAppointment, setConsultingAppointment] = useState<AppointmentDTO | null>(null);
+  const [activeTelehealthAppt, setActiveTelehealthAppt] = useState<AppointmentDTO | null>(null);
   const [isLeaveModalOpen, setIsLeaveModalOpen] = useState<boolean>(false);
   const [notice, setNotice] = useState<string | null>(null);
 
@@ -48,11 +50,11 @@ export const DoctorPortal: React.FC = () => {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '28px', flexWrap: 'wrap', gap: '16px' }}>
         <div>
           <span className="pulse-badge pulse-badge-info" style={{ marginBottom: '6px' }}>Clinician Console</span>
-          <h1 style={{ fontSize: '1.85rem', fontWeight: 800, color: 'var(--text-main)' }}>
+          <h1 style={{ fontSize: '2rem', fontWeight: 900, color: 'var(--text-main)' }}>
             Practice Schedule: {user?.name || 'Dr. Specialist'}
           </h1>
-          <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>
-            Review incoming patient queues, assess AI symptom triage, and record digital prescriptions
+          <p style={{ fontSize: '0.95rem', color: 'var(--text-muted)' }}>
+            Review incoming patient queues, assess AI symptom triage, launch telehealth rooms, and record digital prescriptions
           </p>
         </div>
 
@@ -60,9 +62,9 @@ export const DoctorPortal: React.FC = () => {
           <button
             onClick={() => setIsLeaveModalOpen(true)}
             className="pulse-btn pulse-btn-secondary"
-            style={{ padding: '10px 18px', fontSize: '0.875rem' }}
+            style={{ padding: '10px 18px', fontSize: '0.875rem', fontWeight: 700 }}
           >
-            <Coffee size={16} color="var(--warning-text)" /> Schedule Leave & Conflicts
+            <Coffee size={16} color="var(--warning-text)" /> Schedule Leave & Conflict Sweep
           </button>
         </div>
       </div>
@@ -84,23 +86,24 @@ export const DoctorPortal: React.FC = () => {
             value={selectedDate}
             onChange={(e) => setSelectedDate(e.target.value)}
             style={{
-              padding: '6px 12px',
+              padding: '8px 12px',
               borderRadius: '8px',
               border: '1.5px solid var(--border-strong)',
               fontSize: '0.875rem',
-              fontFamily: 'var(--font-family)'
+              fontFamily: 'var(--font-family)',
+              background: '#FFF'
             }}
           />
         </div>
 
-        <button onClick={fetchAppointments} className="pulse-btn pulse-btn-secondary" style={{ padding: '6px 12px', fontSize: '0.8rem' }}>
+        <button onClick={fetchAppointments} className="pulse-btn pulse-btn-secondary" style={{ padding: '6px 14px', fontSize: '0.85rem' }}>
           <RefreshCw size={14} className={isLoading ? 'animate-spin' : ''} /> Refresh Queue
         </button>
       </div>
 
       {/* Queue List */}
       <div>
-        <h3 style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '16px' }}>
+        <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '16px' }}>
           Patient Consultations for {new Date(selectedDate).toLocaleDateString([], { month: 'long', day: 'numeric', year: 'numeric' })} ({appointments.length})
         </h3>
 
@@ -125,6 +128,7 @@ export const DoctorPortal: React.FC = () => {
                 appointment={appt}
                 isDoctorView={true}
                 onOpenConsultation={(a) => setConsultingAppointment(a)}
+                onOpenTelehealth={(a) => setActiveTelehealthAppt(a)}
               />
             ))}
           </div>
@@ -137,6 +141,15 @@ export const DoctorPortal: React.FC = () => {
           appointment={consultingAppointment}
           onClose={() => setConsultingAppointment(null)}
           onConsultationComplete={handleConsultationSuccess}
+        />
+      )}
+
+      {/* Virtual Telehealth Room Modal */}
+      {activeTelehealthAppt && (
+        <TelehealthRoomModal
+          appointment={activeTelehealthAppt}
+          userRole="DOCTOR"
+          onClose={() => setActiveTelehealthAppt(null)}
         />
       )}
 
